@@ -741,3 +741,59 @@ Processing by HomeController#index as HTML
 Completed 200 OK in 23ms (Views: 18.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 4.4ms)
 
 
+Started GET "/users/password/new" for 127.0.0.1 at 2025-08-06 17:32:04 -0300
+Processing by Devise::PasswordsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering devise/passwords/new.html.erb within layouts/application
+  Rendered devise/shared/_error_messages.html.erb (Duration: 5.7ms | GC: 0.0ms)
+  Rendered devise/shared/_links.html.erb (Duration: 37.2ms | GC: 21.1ms)
+  Rendered devise/passwords/new.html.erb within layouts/application (Duration: 128.6ms | GC: 59.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 166.3ms | GC: 59.2ms)
+Completed 200 OK in 283ms (Views: 219.5ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 109.2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2025-08-06 17:34:01 -0300
+Processing by HomeController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 57.0ms | GC: 29.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 99.8ms | GC: 62.8ms)
+Completed 200 OK in 119ms (Views: 102.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 62.8ms)
+
+
+Started GET "/" for ::1 at 2025-08-06 17:35:35 -0300
+Processing by HomeController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 89.7ms | GC: 43.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 108.5ms | GC: 43.6ms)
+Completed 200 OK in 141ms (Views: 114.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 43.6ms)
+
+
+Started GET "/" for ::1 at 2025-08-06 17:36:27 -0300
+Processing by HomeController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 26.1ms | GC: 5.9ms)
+  Rendered layout layouts/application.html.erb (Duration: 38.2ms | GC: 10.1ms)
+Completed 200 OK in 55ms (Views: 41.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 10.1ms)
+
+
+Started GET "/" for 127.0.0.1 at 2025-08-06 17:36:35 -0300
+Processing by HomeController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 14.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 16.9ms | GC: 0.0ms)
+Completed 200 OK in 27ms (Views: 18.5ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for ::1 at 2025-08-06 17:37:39 -0300
+Processing by HomeController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 46.2ms | GC: 4.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 73.0ms | GC: 8.5ms)
+Completed 200 OK in 133ms (Views: 78.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 18.2ms)
+
+

@@ -13,10 +13,18 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if session[:revenda_id].present?
+    # Limpa tipo de acesso anterior
+    if params[:access_type] == 'webposto'
+      session[:access_type] = 'webposto'
+      session[:revenda_id] = nil
+    end
+    
+    if session[:revenda_id].present? && session[:access_type] == 'revenda'
       revenda_dashboard_path
-    else
+    elsif session[:access_type] == 'webposto'
       webposto_dashboard_path
+    else
+      root_path
     end
   end
 

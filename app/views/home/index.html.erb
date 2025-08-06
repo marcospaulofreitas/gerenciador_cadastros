@@ -1,6 +1,6 @@
 <div class="main-container">
   <div class="app-title">
-    <h1>TechControl</h1>
+    <h1>webControl</h1>
     <div class="subtitle">Sistema de Gerenciamento de Revendas e Técnicos</div>
   </div>
   
@@ -15,9 +15,9 @@
     
     <div class="access-window" data-bs-toggle="modal" data-bs-target="#webpostoModal">
       <div class="access-icon">🖥️</div>
-      <p class="access-text">WebPosto</p>
+      <p class="access-text">webPosto</p>
       <div class="access-button webposto">
-        Acessar como WebPosto
+        Acessar como webPosto
       </div>
     </div>
   </div>
@@ -49,7 +49,7 @@
   </div>
 </div>
 
-<!-- Modal para Login WebPosto -->
+<!-- Modal para Login webPosto -->
 <div class="modal fade" id="webpostoModal" tabindex="-1" data-bs-backdrop="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content" style="border: none; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);">
@@ -59,10 +59,11 @@
         </button>
         <div class="clearfix"></div>
         <div class="text-center mb-4">
-          <h5>Acesso WebPosto</h5>
+          <h5>Acesso webPosto</h5>
         </div>
         
-        <%= form_with model: User.new, url: user_session_path, local: true do |f| %>
+        <%= form_with model: User.new, url: user_session_path, local: true, html: { id: 'webposto-form' } do |f| %>
+          <%= hidden_field_tag :access_type, 'webposto' %>
           <div class="mb-3">
             <%= f.label :email, "E-mail", class: "form-label text-start d-block" %>
             <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "seu@email.com" %>

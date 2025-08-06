@@ -29,6 +29,7 @@ class HomeController < ApplicationController
     
     if revenda
       session[:revenda_id] = revenda.id
+      session[:access_type] = 'revenda'
       render json: { success: true, redirect_url: new_user_session_path(revenda: true) }
     else
       render json: { error: 'CNPJ não encontrado ou revenda inativa' }, status: :not_found
