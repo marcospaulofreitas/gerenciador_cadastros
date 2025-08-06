@@ -1,0 +1,60 @@
+=> Booting Puma
+=> Rails 8.0.2 application starting in development 
+=> Run `bin/rails server --help` for more startup options
+Puma starting in single mode...
+* Puma version: 6.6.1 ("Return to Forever")
+* Ruby version: ruby 3.4.5 (2025-07-16 revision 20cda200d3) +PRISM [x86_64-linux]
+*  Min threads: 3
+*  Max threads: 3
+*  Environment: development
+*          PID: 46104
+* Listening on http://127.0.0.1:3000
+* Listening on http://[::1]:3000
+Use Ctrl-C to stop
+Started GET "/" for 127.0.0.1 at 2025-08-06 16:36:35 -0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='GerenciadorCadastros'*/[0m
+Processing by HomeController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 11.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 19.8ms | GC: 0.0ms)
+Completed 200 OK in 326ms (Views: 23.5ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 43.5ms)
+
+
+Started GET "/" for ::1 at 2025-08-06 16:36:36 -0300
+Processing by HomeController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 4.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.6ms | GC: 0.0ms)
+Completed 200 OK in 13ms (Views: 7.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_in" for ::1 at 2025-08-06 16:36:36 -0300
+Processing by Devise::SessionsController#new as */*
+  Rendering layout layouts/application.html.erb
+  Rendering devise/sessions/new.html.erb within layouts/application
+Started GET "/webposto_login" for 127.0.0.1 at 2025-08-06 16:36:36 -0300
+  Rendered devise/shared/_links.html.erb (Duration: 1.0ms | GC: 0.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 27.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 28.1ms | GC: 0.0ms)
+Completed 200 OK in 58ms (Views: 30.1ms | ActiveRecord: 5.3ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Processing by HomeController#webposto_login as HTML
+Redirected to http://127.0.0.1:3000/users/sign_in
+Completed 302 Found in 6ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/sign_in" for 127.0.0.1 at 2025-08-06 16:36:36 -0300
+Processing by Devise::SessionsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 4.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.7ms | GC: 0.0ms)
+Completed 200 OK in 12ms (Views: 5.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+- Gracefully stopping, waiting for requests to finish
+Exiting

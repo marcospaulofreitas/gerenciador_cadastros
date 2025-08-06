@@ -1,9 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
-  before_action :authenticate_user!, except: [:index, :revenda_login, :webposto_login, :validate_cnpj]
+  before_action :authenticate_user!, unless: :devise_controller_or_home?
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :check_authorization
 
   protected
 
@@ -28,18 +27,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def check_authorization
-    return unless user_signed_in?
-    return if controller_name == 'home' || devise_controller?
-    
-    # WebPosto dashboard - apenas administradores
-    if controller_name == 'dashboards' && action_name == 'webposto'
-      redirect_to root_path unless current_user.administrador?
-    end
-    
-    # Revenda dashboard - apenas com revenda na sessão
-    if controller_name == 'dashboards' && action_name == 'revenda'
-      redirect_to root_path unless current_revenda
-    end
+  def devise_controller_or_home?
+    devise_controller? || controller_name == 'home'
   end
 end

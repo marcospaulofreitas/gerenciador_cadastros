@@ -8,8 +8,8 @@ class HomeController < ApplicationController
   end
 
   def webposto_login
-    # Redireciona para login do Devise
-    redirect_to new_user_session_path
+    # Redireciona para home já que agora usa modal
+    redirect_to root_path
   end
 
   def validate_cnpj

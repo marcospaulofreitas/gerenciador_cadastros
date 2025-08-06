@@ -23,9 +23,7 @@ gem "jbuilder"
 gem "devise"
 # Authorization
 gem "cancancan"
-# Bootstrap for styling
-gem "bootstrap", "~> 5.3"
-gem "sassc-rails"
+# Bootstrap via CDN no layout
 # CNPJ validation
 gem "cpf_cnpj"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
