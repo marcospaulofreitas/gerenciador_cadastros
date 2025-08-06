@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-12">
+    <h2>Dashboard - <%= @revenda.nome_fantasia %></h2>
+    <p class="text-muted">CNPJ: <%= @revenda.cnpj_formatted %></p>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5>Informações da Revenda</h5>
+      </div>
+      <div class="card-body">
+        <p><strong>Razão Social:</strong> <%= @revenda.razao_social %></p>
+        <p><strong>Responsável:</strong> <%= @revenda.responsavel %></p>
+        <p><strong>Classificação:</strong> 
+          <span class="badge bg-<%= case @revenda.classificacao
+            when 'diamante' then 'primary'
+            when 'ouro' then 'warning'
+            when 'prata' then 'secondary'
+            when 'bronze' then 'dark'
+            else 'light'
+          end %>"><%= @revenda.classificacao.humanize %></span>
+        </p>
+        <p><strong>Endereço:</strong> <%= @revenda.endereco_completo %></p>
+        <p><strong>Contato:</strong> <%= @revenda.telefone_suporte %> | <%= @revenda.email_suporte %></p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Técnicos</h5>
+        <%= link_to "Novo Técnico", new_revenda_tecnico_path(@revenda), class: "btn btn-primary btn-sm" %>
+      </div>
+      <div class="card-body">
+        <% if @tecnicos.any? %>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Função</th>
+                  <th>Especialista</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @tecnicos.each do |tecnico| %>
+                  <tr>
+                    <td><%= tecnico.name %></td>
+                    <td><%= tecnico.funcao_humanized %></td>
+                    <td>
+                      <% if tecnico.especialista? %>
+                        <span class="badge bg-success">Sim</span>
+                      <% else %>
+                        <span class="badge bg-secondary">Não</span>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= link_to "Editar", edit_revenda_tecnico_path(@revenda, tecnico), class: "btn btn-outline-primary btn-sm" %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <p class="text-muted">Nenhum técnico cadastrado.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+pt-BR:
+  tecnicos:
+    funcoes:
+      supervisor: "Supervisor"
+      rh: "RH"
+      suporte: "Suporte"
+      desenvolvedor: "Desenvolvedor"
+      analista: "Analista"
+      plantao: "Plantão"
+      dba: "DBA"
+      comercial: "Comercial"
+      financeiro: "Financeiro"
+      outros: "Outros"
+  
+  activerecord:
+    models:
+      user: "Usuário"
+      revenda: "Revenda"
+      tecnico: "Técnico"
+      user_profile: "Perfil de Usuário"
+    
+    attributes:
+      user:
+        name: "Nome"
+        email: "E-mail"
+        login: "Login"
+        password: "Senha"
+        password_confirmation: "Confirmação da Senha"
+        user_profile: "Perfil"
+        revenda: "Revenda"
+        active: "Ativo"
+      
+      revenda:
+        cnpj: "CNPJ"
+        razao_social: "Razão Social"
+        nome_fantasia: "Nome Fantasia"
+        tipo_contato: "Tipo de Contato"
+        telefone_suporte: "Telefone do Suporte"
+        email_suporte: "E-mail do Suporte"
+        responsavel: "Responsável"
+        cep: "CEP"
+        logradouro: "Logradouro"
+        numero: "Número"
+        complemento: "Complemento"
+        bairro: "Bairro"
+        cidade: "Cidade"
+        uf: "UF"
+        classificacao: "Classificação"
+        gerente_contas: "Gerente de Contas"
+        active: "Ativa"
+      
+      tecnico:
+        name: "Nome"
+        email: "E-mail"
+        telefone: "Telefone"
+        funcao: "Função"
+        especialista: "Especialista"
+        perfil_acesso: "Perfil de Acesso"
+        username: "Nome de Usuário"
+        password: "Senha"
+        active: "Ativo"

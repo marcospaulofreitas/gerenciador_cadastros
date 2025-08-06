@@ -4,8 +4,10 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-# Use PostgreSQL as the database for Active Record
-gem "pg", "~> 1.1"
+# Use SQLite as the database for Active Record
+gem "sqlite3", ">= 2.1"
+# Use PostgreSQL for production
+gem "pg", "~> 1.1", group: :production
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -23,6 +25,7 @@ gem "devise"
 gem "cancancan"
 # Bootstrap for styling
 gem "bootstrap", "~> 5.3"
+gem "sassc-rails"
 # CNPJ validation
 gem "cpf_cnpj"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]

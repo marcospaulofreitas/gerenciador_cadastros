@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-12">
+    <h2>Dashboard WebPosto</h2>
+    <p class="text-muted">Painel administrativo do sistema</p>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h1 class="text-primary"><%= @revendas_count %></h1>
+        <h5>Revendas</h5>
+        <%= link_to "Gerenciar", revendas_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h1 class="text-success"><%= @tecnicos_count %></h1>
+        <h5>Técnicos</h5>
+        <%= link_to "Ver Todos", revendas_path, class: "btn btn-success" %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h1 class="text-info"><%= @users_count %></h1>
+        <h5>Usuários</h5>
+        <%= link_to "Gerenciar", users_path, class: "btn btn-info" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5>Ações Rápidas</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <%= link_to new_revenda_path, class: "btn btn-outline-primary w-100 mb-2" do %>
+              <i class="fas fa-plus"></i> Nova Revenda
+            <% end %>
+          </div>
+          <div class="col-md-3">
+            <%= link_to new_user_path, class: "btn btn-outline-success w-100 mb-2" do %>
+              <i class="fas fa-user-plus"></i> Novo Usuário
+            <% end %>
+          </div>
+          <div class="col-md-3">
+            <%= link_to revendas_path, class: "btn btn-outline-info w-100 mb-2" do %>
+              <i class="fas fa-list"></i> Listar Revendas
+            <% end %>
+          </div>
+          <div class="col-md-3">
+            <%= link_to users_path, class: "btn btn-outline-warning w-100 mb-2" do %>
+              <i class="fas fa-users"></i> Listar Usuários
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

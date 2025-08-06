@@ -3,6 +3,7 @@ class Tecnico < ApplicationRecord
   PERFIS_ACESSO = %w[administrador tecnico].freeze
 
   belongs_to :revenda
+  has_secure_password
 
   validates :name, presence: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -10,7 +11,6 @@ class Tecnico < ApplicationRecord
   validates :funcao, inclusion: { in: FUNCOES }
   validates :perfil_acesso, inclusion: { in: PERFIS_ACESSO }
   validates :username, presence: true, uniqueness: true
-  validates :password, presence: true, length: { minimum: 6 }
 
   scope :active, -> { where(active: true) }
   scope :especialistas, -> { where(especialista: true) }

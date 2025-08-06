@@ -1,0 +1,49 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Revendas</h2>
+  <%= link_to "Nova Revenda", new_revenda_path, class: "btn btn-primary" %>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <% if @revendas.any? %>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>CNPJ</th>
+              <th>Nome Fantasia</th>
+              <th>Classificação</th>
+              <th>Gerente de Contas</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @revendas.each do |revenda| %>
+              <tr>
+                <td><%= revenda.cnpj_formatted %></td>
+                <td><%= revenda.nome_fantasia %></td>
+                <td>
+                  <span class="badge bg-<%= case revenda.classificacao
+                    when 'diamante' then 'primary'
+                    when 'ouro' then 'warning'
+                    when 'prata' then 'secondary'
+                    when 'bronze' then 'dark'
+                    else 'light'
+                  end %>"><%= revenda.classificacao.humanize %></span>
+                </td>
+                <td><%= revenda.gerente_contas.name %></td>
+                <td>
+                  <%= link_to "Ver", revenda, class: "btn btn-outline-info btn-sm" %>
+                  <%= link_to "Editar", edit_revenda_path(revenda), class: "btn btn-outline-primary btn-sm" %>
+                  <%= link_to "Técnicos", revenda_tecnicos_path(revenda), class: "btn btn-outline-success btn-sm" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-muted">Nenhuma revenda cadastrada.</p>
+    <% end %>
+  </div>
+</div>

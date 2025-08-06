@@ -23,5 +23,9 @@ module GerenciadorCadastros
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    
+    # Configuração de internacionalização
+    config.i18n.default_locale = :'pt-BR'
+    config.time_zone = 'Brasilia'
   end
 end
