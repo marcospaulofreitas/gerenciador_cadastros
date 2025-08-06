@@ -16,25 +16,33 @@ class User < ApplicationRecord
   scope :gerentes_contas, -> { joins(:user_profile).where(user_profiles: { name: 'gerente_contas' }) }
   scope :basicos, -> { joins(:user_profile).where(user_profiles: { name: 'basico' }) }
 
-  def administrador?
-    user_profile&.administrador?
+  def webposto_admin?
+    user_profile&.name == 'administrador'
   end
 
-  def gerente_contas?
-    user_profile&.gerente_contas?
+  def webposto_gerente?
+    user_profile&.name == 'gerente_contas'
   end
 
-  def basico?
-    user_profile&.basico?
+  def webposto_basico?
+    user_profile&.name == 'basico'
+  end
+
+  def revenda_admin?
+    user_profile&.name == 'revenda_admin'
+  end
+
+  def revenda_tecnico?
+    user_profile&.name == 'revenda_tecnico'
   end
 
   def full_access?
-    administrador? || gerente_contas?
+    webposto_admin? || webposto_gerente?
   end
 
   def can_manage_revenda?(revenda)
-    return true if administrador?
-    return false unless gerente_contas?
+    return true if webposto_admin?
+    return false unless webposto_gerente?
     
     managed_revendas.include?(revenda)
   end
@@ -42,7 +50,7 @@ class User < ApplicationRecord
   private
 
   def gerente_contas_must_have_revenda
-    return unless gerente_contas? && revenda.blank?
+    return unless webposto_gerente? && revenda.blank?
     
     errors.add(:revenda, 'deve ser selecionada para Gerente de Contas')
   end

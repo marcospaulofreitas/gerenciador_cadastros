@@ -1,5 +1,5 @@
 class UserProfile < ApplicationRecord
-  PROFILES = %w[administrador gerente_contas basico].freeze
+  PROFILES = %w[administrador gerente_contas basico revenda_admin revenda_tecnico].freeze
 
   has_many :users, dependent: :restrict_with_error
 

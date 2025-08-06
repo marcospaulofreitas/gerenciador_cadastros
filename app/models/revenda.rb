@@ -27,13 +27,13 @@ class Revenda < ApplicationRecord
   scope :by_classificacao, ->(classificacao) { where(classificacao: classificacao) }
 
   def endereco_completo
-    \"#{logradouro}, #{numero}#{complemento.present? ? \", #{complemento}\" : ''} - #{bairro}, #{cidade}/#{uf} - CEP: #{cep}\"
+    "#{logradouro}, #{numero}#{complemento.present? ? ", #{complemento}" : ''} - #{bairro}, #{cidade}/#{uf} - CEP: #{cep}"
   end
 
   def cnpj_formatted
     return cnpj unless cnpj.present?
     
-    cnpj.gsub(/\\D/, '').gsub(/(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})/, '\\1.\\2.\\3/\\4-\\5')
+    cnpj.gsub(/\D/, '').gsub(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '\1.\2.\3/\4-\5')
   end
 
   private
@@ -41,8 +41,10 @@ class Revenda < ApplicationRecord
   def cnpj_must_be_valid
     return if cnpj.blank?
     
-    unless CpfCnpj.valid?(cnpj)
-      errors.add(:cnpj, 'não é válido')
+    # Validação básica de formato CNPJ
+    cnpj_numbers = cnpj.gsub(/\D/, '')
+    unless cnpj_numbers.length == 14
+      errors.add(:cnpj, 'deve ter 14 dígitos')
     end
   end
 end

@@ -797,3 +797,66 @@ Processing by HomeController#index as */*
 Completed 200 OK in 133ms (Views: 78.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 18.2ms)
 
 
+Started GET "/" for ::1 at 2025-08-06 17:46:14 -0300
+Processing by HomeController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 58.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 77.2ms | GC: 0.0ms)
+Completed 200 OK in 113ms (Views: 83.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2025-08-06 17:54:49 -0300
+Processing by HomeController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 87.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 111.3ms | GC: 0.0ms)
+Completed 200 OK in 166ms (Views: 124.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/assets/application-acd25905.css" for 127.0.0.1 at 2025-08-06 17:54:50 -0300
+Started POST "/validate_cnpj" for 127.0.0.1 at 2025-08-06 17:56:57 -0300
+Processing by HomeController#validate_cnpj as */*
+  Parameters: {"authenticity_token" => "[FILTERED]", "cnpj" => "12.345.678/0001-95"}
+  [1m[36mRevenda Load (1.0ms)[0m  [1m[34mSELECT "revendas".* FROM "revendas" WHERE "revendas"."active" = 1 AND "revendas"."cnpj" = '12345678000195' LIMIT 1 /*action='validate_cnpj',application='GerenciadorCadastros',controller='home'*/[0m
+  ↳ app/controllers/home_controller.rb:28:in 'HomeController#validate_cnpj'
+Completed 200 OK in 794ms (Views: 5.3ms | ActiveRecord: 15.4ms (1 query, 0 cached) | GC: 500.1ms)
+
+
+Started GET "/users/sign_in?revenda=true" for 127.0.0.1 at 2025-08-06 17:56:58 -0300
+Processing by Devise::SessionsController#new as HTML
+  Parameters: {"revenda" => "true"}
+  Rendering layout layouts/application.html.erb
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/sessions/new.html.erb within layouts/application (Duration: 31.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 67.7ms | GC: 18.5ms)
+Completed 200 OK in 127ms (Views: 85.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 38.9ms)
+
+
+Started POST "/validate_cnpj" for 127.0.0.1 at 2025-08-06 17:56:59 -0300
+Processing by HomeController#validate_cnpj as */*
+  Parameters: {"authenticity_token" => "[FILTERED]", "cnpj" => "12.345.678/0001-95"}
+  [1m[36mRevenda Load (24.7ms)[0m  [1m[34mSELECT "revendas".* FROM "revendas" WHERE "revendas"."active" = 1 AND "revendas"."cnpj" = '12345678000195' LIMIT 1 /*action='validate_cnpj',application='GerenciadorCadastros',controller='home'*/[0m
+  ↳ app/controllers/home_controller.rb:28:in 'HomeController#validate_cnpj'
+Completed 200 OK in 35ms (Views: 0.1ms | ActiveRecord: 24.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2025-08-06 17:57:03 -0300
+Processing by HomeController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 42.9ms | GC: 23.7ms)
+  Rendered layout layouts/application.html.erb (Duration: 44.5ms | GC: 23.7ms)
+Completed 200 OK in 62ms (Views: 53.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 23.7ms)
+
+
+Started GET "/" for 127.0.0.1 at 2025-08-06 17:57:06 -0300
+Processing by HomeController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 30.5ms | GC: 23.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 31.6ms | GC: 23.4ms)
+Completed 200 OK in 37ms (Views: 32.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 23.4ms)
+
+
