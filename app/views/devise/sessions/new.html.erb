@@ -1,8 +1,8 @@
 <% if params[:access_type] == 'revenda' %>
   <!-- Modal para CNPJ da Revenda -->
-  <div class="modal show d-block" tabindex="-1" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(5px);">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-      <div class="modal-content" style="border: none; border-radius: 12px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+  <div class="modal show d-block" tabindex="-1" style="background: url('background.jpg') center/cover no-repeat fixed;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content login-window">
         <div class="modal-body p-3">
           <%= link_to "← Voltar", root_path, class: "btn btn-back btn-sm float-start mb-2" %>
           <div class="clearfix"></div>
@@ -67,9 +67,9 @@
 
 
   <!-- Modal para Login webPosto -->
-  <div class="modal show d-block" tabindex="-1" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(5px);">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-      <div class="modal-content" style="border: none; border-radius: 12px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+  <div class="modal show d-block" tabindex="-1" style="background: url('background.jpg') center/cover no-repeat fixed;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content login-window">
         <div class="modal-body p-3">
           <%= link_to "← Voltar", root_path, class: "btn btn-back btn-sm float-start mb-2" %>
           <div class="clearfix"></div>
