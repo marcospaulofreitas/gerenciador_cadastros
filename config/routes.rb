@@ -1,11 +1,21 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { sessions: 'devise/sessions' }, path: 'webposto', path_names: {
+    sign_in: 'login',
+    sign_out: 'logout'
+  }
+  
+  devise_for :tecnicos, controllers: { sessions: 'devise/tecnicos/sessions' }, path: 'revenda', path_names: {
+    sign_in: 'login',
+    sign_out: 'logout'
+  }
+  
   root 'home#index'
 
-  # Rotas da tela inicial
-  get 'revenda_login', to: 'home#revenda_login'
-  get 'webposto_login', to: 'home#webposto_login'
+  # Rotas da tela inicial - redirecionamentos
+  get 'revenda_login', to: redirect('/revenda/login')
+  get 'webposto_login', to: redirect('/webposto/login')
   post 'validate_cnpj', to: 'home#validate_cnpj'
+  post 'validate_cnpj_name', to: 'home#validate_cnpj_name'
 
   # Dashboards
   get 'revenda_dashboard', to: 'dashboards#revenda'

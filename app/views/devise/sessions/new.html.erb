@@ -1,39 +1,217 @@
-<div class="main-container">
-  <div class="login-window">
-    <%= link_to root_path, class: "btn btn-back mb-3" do %>
-      ← Voltar
-    <% end %>
-    
-    <div class="text-center mb-4">
-      <div class="access-icon">🖥️</div>
-      <h4>Login</h4>
-    </div>
+<% if params[:access_type] == 'revenda' %>
+  <!-- Modal para CNPJ da Revenda -->
+  <div class="modal show d-block" tabindex="-1" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(5px);">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content" style="border: none; border-radius: 12px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+        <div class="modal-body p-3">
+          <%= link_to "← Voltar", root_path, class: "btn btn-back btn-sm float-start mb-2" %>
+          <div class="clearfix"></div>
+          <div class="text-center mb-3">
+            <h6 class="mb-0">Acesso Revenda</h6>
+          </div>
+          
+          <% if notice %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <%= notice %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          <% end %>
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="mb-3">
-        <%= f.label :email, "E-mail", class: "form-label" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "seu@email.com" %>
-      </div>
+          <% if alert %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <%= alert %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          <% end %>
+          
+          <%= form_with model: resource, as: resource_name, url: session_path(resource_name), local: true, html: { id: 'revenda-form' } do |f| %>
+            <%= hidden_field_tag :access_type, 'revenda' %>
+            
+            <div class="mb-2">
+              <%= f.label :cnpj, "CNPJ da Revenda", class: "form-label text-start d-block small" %>
+              <%= f.text_field :cnpj, class: "form-control form-control-sm", placeholder: "00.000.000/0000-00", required: true, maxlength: "18", id: "cnpj-input", value: params[:user]&.dig(:cnpj) %>
+              <div id="cnpj-error" class="form-text text-danger d-none small"></div>
+            </div>
 
-      <div class="mb-3">
-        <%= f.label :password, "Senha", class: "form-label" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "form-control", placeholder: "••••••••" %>
-      </div>
+            <div class="mb-2">
+              <%= f.label :login, "Login", class: "form-label text-start d-block small" %>
+              <%= f.text_field :login, class: "form-control form-control-sm", placeholder: "seu_login", required: true, value: params[:user]&.dig(:login) %>
+            </div>
 
-      <% if devise_mapping.rememberable? %>
-        <div class="mb-3 form-check">
-          <%= f.check_box :remember_me, class: "form-check-input" %>
-          <%= f.label :remember_me, "Lembrar-me", class: "form-check-label" %>
+            <div class="mb-2">
+              <%= f.label :password, "Senha", class: "form-label text-start d-block small" %>
+              <div class="position-relative">
+                <%= f.password_field :password, autocomplete: "current-password", class: "form-control form-control-sm", placeholder: "••••••••", required: true, id: "password-revenda" %>
+                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y p-1" style="border: none; background: none; font-size: 0.8rem;" onclick="togglePassword('password-revenda', this)">
+                  <i class="fas fa-eye" id="eye-icon-revenda"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="mb-2 form-check">
+              <%= f.check_box :remember_me, class: "form-check-input form-check-input-sm" %>
+              <%= f.label :remember_me, "Lembrar-me", class: "form-check-label small" %>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm w-100">Entrar</button>
+          <% end %>
+
+          <div class="text-center mt-2">
+            <%= link_to "Esqueci a senha", new_user_password_path, class: "forgot-password small" %>
+          </div>
         </div>
-      <% end %>
-
-      <div class="mb-3">
-        <%= f.submit "Entrar", class: "btn btn-primary w-100" %>
       </div>
-    <% end %>
-
-    <div class="text-center">
-      <%= link_to "Esqueci a senha", new_password_path(resource_name), class: "forgot-password" %>
     </div>
   </div>
-</div>
+
+<% else %>
+
+
+  <!-- Modal para Login webPosto -->
+  <div class="modal show d-block" tabindex="-1" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(5px);">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content" style="border: none; border-radius: 12px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+        <div class="modal-body p-3">
+          <%= link_to "← Voltar", root_path, class: "btn btn-back btn-sm float-start mb-2" %>
+          <div class="clearfix"></div>
+          <div class="text-center mb-3">
+            <h6 class="mb-0">Acesso webPosto</h6>
+          </div>
+          
+          <% if notice %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="font-size: 0.8rem; padding: 0.5rem;">
+              <%= notice %>
+              <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button>
+            </div>
+          <% end %>
+
+          <% if alert %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="font-size: 0.8rem; padding: 0.5rem;">
+              <%= alert %>
+              <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button>
+            </div>
+          <% end %>
+          
+          <%= form_with model: resource, as: resource_name, url: session_path(resource_name), local: true, html: { id: 'webposto-form' } do |f| %>
+            <%= hidden_field_tag :access_type, 'webposto' %>
+            <div class="mb-2">
+              <%= f.label :email, "E-mail", class: "form-label text-start d-block small" %>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control form-control-sm", placeholder: "seu@email.com", value: params[:user]&.dig(:email) %>
+            </div>
+
+            <div class="mb-2">
+              <%= f.label :password, "Senha", class: "form-label text-start d-block small" %>
+              <div class="position-relative">
+                <%= f.password_field :password, autocomplete: "current-password", class: "form-control form-control-sm", placeholder: "••••••••", id: "password-webposto" %>
+                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y p-1" style="border: none; background: none; font-size: 0.8rem;" onclick="togglePassword('password-webposto', this)">
+                  <i class="fas fa-eye" id="eye-icon-webposto"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="mb-2 form-check">
+              <%= f.check_box :remember_me, class: "form-check-input form-check-input-sm" %>
+              <%= f.label :remember_me, "Lembrar-me", class: "form-check-label small" %>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm w-100">Entrar</button>
+          <% end %>
+
+          <div class="text-center mt-2">
+            <%= link_to "Esqueci a senha", new_user_password_path, class: "forgot-password small" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<style>
+.btn-back {
+  background: none;
+  border: none;
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.btn-back:hover {
+  color: #495057;
+  text-decoration: underline;
+}
+
+.forgot-password {
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.forgot-password:hover {
+  color: #495057;
+  text-decoration: underline;
+}
+</style>
+
+<script>
+// Auto-hide alerts após 4 segundos
+document.addEventListener('DOMContentLoaded', function() {
+  const alerts = document.querySelectorAll('.alert');
+  alerts.forEach(function(alert) {
+    setTimeout(function() {
+      if (alert && alert.parentNode) {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(function() {
+          if (alert.parentNode) {
+            alert.parentNode.removeChild(alert);
+          }
+        }, 500);
+      }
+    }, 4000);
+  });
+});
+
+// Máscara para CNPJ
+function applyCnpjMask() {
+  const cnpjInput = document.getElementById('cnpj-input');
+  if (cnpjInput) {
+    cnpjInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      
+      if (value.length >= 2) {
+        value = value.replace(/(\d{2})(\d)/, '$1.$2');
+      }
+      if (value.length >= 6) {
+        value = value.replace(/(\d{2}\.\d{3})(\d)/, '$1.$2');
+      }
+      if (value.length >= 10) {
+        value = value.replace(/(\d{2}\.\d{3}\.\d{3})(\d)/, '$1/$2');
+      }
+      if (value.length >= 15) {
+        value = value.replace(/(\d{2}\.\d{3}\.\d{3}\/\d{4})(\d)/, '$1-$2');
+      }
+      
+      e.target.value = value;
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', applyCnpjMask);
+document.addEventListener('turbo:load', applyCnpjMask);
+
+// Função para mostrar/ocultar senha
+function togglePassword(fieldId, button) {
+  const field = document.getElementById(fieldId);
+  const icon = button.querySelector('i');
+  
+  if (field.type === 'password') {
+    field.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    field.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
+}
+</script>

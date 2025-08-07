@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20241230005) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_07_165137) do
   create_table "revendas", force: :cascade do |t|
     t.string "cnpj", null: false
     t.string "razao_social", null: false
@@ -48,6 +48,14 @@ ActiveRecord::Schema[8.0].define(version: 20241230005) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_digest", null: false
+    t.string "encrypted_password"
+    t.datetime "remember_created_at"
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
     t.index ["revenda_id"], name: "index_tecnicos_on_revenda_id"
     t.index ["telefone"], name: "index_tecnicos_on_telefone", unique: true
     t.index ["username"], name: "index_tecnicos_on_username", unique: true

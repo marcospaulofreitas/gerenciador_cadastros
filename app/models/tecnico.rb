@@ -1,16 +1,31 @@
 class Tecnico < ApplicationRecord
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :timeoutable
+         
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
+         
   FUNCOES = %w[supervisor rh suporte desenvolvedor analista plantao dba comercial financeiro outros].freeze
   PERFIS_ACESSO = %w[administrador tecnico].freeze
 
   belongs_to :revenda
-  has_secure_password
 
   validates :name, presence: true
-  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :telefone, presence: true, uniqueness: true
   validates :funcao, inclusion: { in: FUNCOES }
   validates :perfil_acesso, inclusion: { in: PERFIS_ACESSO }
   validates :username, presence: true, uniqueness: true
+  
+  def email_required?
+    false
+  end
+  
+  def email_changed?
+    false
+  end
+  
+  def will_save_change_to_email?
+    false
+  end
 
   scope :active, -> { where(active: true) }
   scope :especialistas, -> { where(especialista: true) }
@@ -26,7 +41,7 @@ class Tecnico < ApplicationRecord
   end
 
   def funcao_humanized
-    I18n.t(\"tecnicos.funcoes.#{funcao}\", default: funcao.humanize)
+    I18n.t("tecnicos.funcoes.#{funcao}", default: funcao.humanize)
   end
 
   def can_access_other_tecnicos?

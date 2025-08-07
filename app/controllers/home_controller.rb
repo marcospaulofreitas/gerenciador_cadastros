@@ -12,7 +12,7 @@ class HomeController < ApplicationController
     redirect_to root_path
   end
 
-  def validate_cnpj
+  def validate_cnpj_name
     cnpj = sanitize_cnpj(params[:cnpj])
     
     if cnpj.blank?
@@ -28,11 +28,9 @@ class HomeController < ApplicationController
     revenda = Revenda.active.find_by(cnpj: cnpj)
     
     if revenda
-      session[:revenda_id] = revenda.id
-      session[:access_type] = 'revenda'
-      render json: { success: true, redirect_url: new_user_session_path(revenda: true) }
+      render json: { success: true, revenda_name: revenda.nome_fantasia }
     else
-      render json: { error: 'CNPJ não encontrado ou revenda inativa' }, status: :not_found
+      render json: { error: 'CNPJ não cadastrado em nosso sistema' }, status: :not_found
     end
   end
 

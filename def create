@@ -1,0 +1,30 @@
+def create
+  cnpj = params[:user]&.delete(:cnpj)
+  access_type = params[:access_type]
+
+  if access_type == 'webposto'
+    # Garante que login seja igual ao email para autenticação
+    params[:user][:login] = params[:user][:email]
+  end
+
+  self.resource = warden.authenticate!(auth_options)
+
+  if access_type == 'revenda' && cnpj.present?
+    sanitized_cnpj = cnpj.gsub(/\D/, '')
+    revenda = Revenda.active.find_by(cnpj: sanitized_cnpj)
+
+    unless revenda && resource.revenda == revenda
+      sign_out(resource)
+      flash[:alert] = 'CNPJ, Login ou senha estão incorretos'
+      redirect_to revenda_login_path
+      return
+    end
+
+    session[:revenda_id] = revenda.id
+    session[:access_type] = 'revenda'
+  elsif access_type == 'webposto'
+    session[:access_type] = 'webposto'
+  end
+
+  # ...continua fluxo padrão do Devise
+end

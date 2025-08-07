@@ -1,0 +1,138 @@
+/* Estilos do Dashboard */
+.card-hover {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-icon {
+  margin-bottom: 1rem;
+}
+
+.stat-item {
+  padding: 1rem;
+  border-right: 1px solid #e9ecef;
+}
+
+.stat-item:last-child {
+  border-right: none;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+}
+
+.navbar {
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Layout do Dashboard */
+.dashboard-container {
+  background: #f8f9fa;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.dashboard-content {
+  padding: 2rem;
+}
+
+/* Cartões flutuantes */
+.floating-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: none;
+  overflow: hidden;
+}
+
+.floating-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Ícones dos cartões */
+.card-icon i {
+  background: linear-gradient(45deg, currentColor, currentColor);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Navbar superior */
+.top-navbar {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 20px 20px;
+  margin-bottom: 2rem;
+}
+
+.nav-link {
+  font-weight: 500;
+  color: #6c757d;
+  transition: all 0.3s ease;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin: 0 0.25rem;
+}
+
+.nav-link:hover {
+  color: #007bff;
+  background: rgba(0, 123, 255, 0.1);
+}
+
+/* Estatísticas */
+.stats-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.stats-card .card-header {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 1rem;
+  }
+  
+  .floating-card {
+    margin-bottom: 1rem;
+  }
+  
+  .top-navbar .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .nav-link {
+    text-align: center;
+    margin: 0.25rem 0;
+  }
+}

@@ -1,6 +1,16 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :timeoutable
+         
+  def self.find_for_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if (login = conditions.delete(:login))
+      where(conditions.to_h).where(["lower(email) = :value OR lower(login) = :value", { :value => login.downcase }]).first
+    else
+      where(conditions.to_h).first
+    end
+  end
+
 
   belongs_to :user_profile
   belongs_to :revenda, optional: true
