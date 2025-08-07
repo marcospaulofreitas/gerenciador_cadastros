@@ -10,17 +10,16 @@
             <h6 class="mb-0">Acesso Revenda</h6>
           </div>
           
-          <% if notice %>
+          <% if flash[:notice] %>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-              <%= notice %>
+              <%= flash[:notice] %>
               <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
           <% end %>
 
-          <% if alert %>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              <%= alert %>
-              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <% if flash[:alert] %>
+            <div class="alert alert-danger" role="alert" style="font-size: 0.8rem; padding: 0.5rem; margin-bottom: 1rem; background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; border-radius: 0.25rem;">
+              <strong>Erro:</strong> <%= flash[:alert] %>
             </div>
           <% end %>
           
@@ -78,17 +77,16 @@
             <h6 class="mb-0">Acesso webPosto</h6>
           </div>
           
-          <% if notice %>
+          <% if flash[:notice] %>
             <div class="alert alert-success alert-dismissible fade show" role="alert" style="font-size: 0.8rem; padding: 0.5rem;">
-              <%= notice %>
+              <%= flash[:notice] %>
               <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button>
             </div>
           <% end %>
 
-          <% if alert %>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="font-size: 0.8rem; padding: 0.5rem;">
-              <%= alert %>
-              <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button>
+          <% if flash[:alert] %>
+            <div class="alert alert-danger" role="alert" style="font-size: 0.8rem; padding: 0.5rem; margin-bottom: 1rem; background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; border-radius: 0.25rem;">
+              <strong>Erro:</strong> <%= flash[:alert] %>
             </div>
           <% end %>
           

@@ -13,16 +13,16 @@
         
 
         
-        <% if notice %>
+        <% if flash[:notice] %>
           <div class="alert alert-success alert-dismissible fade show" role="alert" style="font-size: 0.8rem; padding: 0.5rem;">
-            <%= notice %>
+            <%= flash[:notice] %>
             <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button>
           </div>
         <% end %>
 
-        <% if alert %>
+        <% if flash[:alert] %>
           <div class="alert alert-danger" role="alert" style="font-size: 0.8rem; padding: 0.5rem; margin-bottom: 1rem; background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; border-radius: 0.25rem;">
-            <strong>Erro:</strong> <%= alert %>
+            <strong>Erro:</strong> <%= flash[:alert] %>
           </div>
         <% end %>
 
