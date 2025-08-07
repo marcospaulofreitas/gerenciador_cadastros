@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_07_165137) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_07_191245) do
   create_table "revendas", force: :cascade do |t|
     t.string "cnpj", null: false
     t.string "razao_social", null: false
@@ -47,7 +47,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_07_165137) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "password_digest", null: false
     t.string "encrypted_password"
     t.datetime "remember_created_at"
     t.datetime "current_sign_in_at"

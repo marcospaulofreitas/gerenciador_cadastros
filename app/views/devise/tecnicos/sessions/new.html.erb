@@ -26,7 +26,7 @@
           </div>
         <% end %>
 
-        <%= form_with model: resource, as: :tecnico, url: tecnico_session_path, local: true do |f| %>
+        <%= form_with model: resource, as: :tecnico, url: tecnico_session_path, local: true, data: { turbo: false } do |f| %>
           <div class="mb-2">
             <%= f.label :cnpj, "CNPJ da Revenda", class: "form-label text-start d-block small" %>
             <%= f.text_field :cnpj, class: "form-control form-control-sm", placeholder: "00.000.000/0000-00", required: true, maxlength: "18", id: "cnpj-input", value: params[:tecnico]&.dig(:cnpj) %>

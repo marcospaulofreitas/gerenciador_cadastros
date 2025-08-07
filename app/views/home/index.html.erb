@@ -1,7 +1,18 @@
 <div class="main-container">
+  <% if flash[:notice] %>
+    <div class="alert alert-success" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 9999; font-size: 0.8rem; padding: 0.5rem; max-width: 300px;">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+  
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 9999; font-size: 0.8rem; padding: 0.5rem; max-width: 300px;">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+  
   <div class="app-title">
-    <h1>webControl</h1>
-    <div class="subtitle">Sistema de Gerenciamento de Revendas e Técnicos</div>
+    <h1>Sistema de Gerenciamento de Revendas e Técnicos</h1>
   </div>
   
   <div class="access-windows">
@@ -22,3 +33,41 @@
     <% end %>
   </div>
 </div>
+
+<script>
+// Auto-hide alerts após 4 segundos
+document.addEventListener('DOMContentLoaded', function() {
+  const alerts = document.querySelectorAll('.alert');
+  alerts.forEach(function(alert) {
+    setTimeout(function() {
+      if (alert && alert.parentNode) {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(function() {
+          if (alert.parentNode) {
+            alert.parentNode.removeChild(alert);
+          }
+        }, 500);
+      }
+    }, 4000);
+  });
+});
+
+// Para compatibilidade com Turbo
+document.addEventListener('turbo:load', function() {
+  const alerts = document.querySelectorAll('.alert');
+  alerts.forEach(function(alert) {
+    setTimeout(function() {
+      if (alert && alert.parentNode) {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(function() {
+          if (alert.parentNode) {
+            alert.parentNode.removeChild(alert);
+          }
+        }, 500);
+      }
+    }, 4000);
+  });
+});
+</script>

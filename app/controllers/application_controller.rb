@@ -4,6 +4,13 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user_or_tecnico!, unless: :public_action?
   before_action :check_revenda_access, if: :revenda_access?
   before_action :configure_permitted_parameters, if: :devise_controller?
+  
+  # Tratamento de timeout do Devise
+  def handle_unverified_request
+    sign_out_all_scopes
+    flash[:alert] = 'Sua sessão expirou por inatividade. Faça login novamente.'
+    redirect_to root_path
+  end
 
   protected
 
