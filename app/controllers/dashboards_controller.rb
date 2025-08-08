@@ -27,5 +27,8 @@ class DashboardsController < ApplicationController
     end
     
     @user = current_user
+    @revendas_count = Revenda.count
+    @tecnicos_count = Tecnico.active.count
+    @users_count = User.active.count
   end
 end

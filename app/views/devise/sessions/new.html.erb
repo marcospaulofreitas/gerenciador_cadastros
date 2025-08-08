@@ -90,7 +90,7 @@
             </div>
           <% end %>
           
-          <%= form_with model: resource, as: resource_name, url: session_path(resource_name), local: true, data: { turbo: false }, html: { id: 'webposto-form' } do |f| %>
+          <%= form_with model: resource, as: resource_name, url: session_path(resource_name), local: true, html: { id: 'webposto-form' } do |f| %>
             <%= hidden_field_tag :access_type, 'webposto' %>
             <div class="mb-2">
               <%= f.label :email, "E-mail", class: "form-label text-start d-block small" %>

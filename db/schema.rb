@@ -10,7 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_07_191245) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_07_202950) do
+  create_table "audits", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "tecnico_id"
+    t.string "auditable_type", null: false
+    t.integer "auditable_id", null: false
+    t.string "action", null: false
+    t.text "field_changes"
+    t.string "ip_address"
+    t.string "user_agent"
+    t.string "performed_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["auditable_type", "auditable_id"], name: "index_audits_on_auditable"
+    t.index ["auditable_type", "auditable_id"], name: "index_audits_on_auditable_type_and_auditable_id"
+    t.index ["created_at"], name: "index_audits_on_created_at"
+    t.index ["tecnico_id"], name: "index_audits_on_tecnico_id"
+    t.index ["user_id"], name: "index_audits_on_user_id"
+  end
+
   create_table "revendas", force: :cascade do |t|
     t.string "cnpj", null: false
     t.string "razao_social", null: false
@@ -88,6 +107,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_07_191245) do
     t.index ["user_profile_id"], name: "index_users_on_user_profile_id"
   end
 
+  add_foreign_key "audits", "tecnicos"
+  add_foreign_key "audits", "users"
   add_foreign_key "revendas", "users", column: "gerente_contas_id"
   add_foreign_key "tecnicos", "revendas"
   add_foreign_key "users", "revendas"
