@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_08_125256) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_08_141046) do
   create_table "audits", force: :cascade do |t|
     t.integer "user_id"
     t.integer "tecnico_id"
@@ -23,6 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_125256) do
     t.string "performed_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "aprovado", default: false, null: false
     t.index ["auditable_type", "auditable_id"], name: "index_audits_on_auditable"
     t.index ["tecnico_id"], name: "index_audits_on_tecnico_id"
     t.index ["user_id"], name: "index_audits_on_user_id"

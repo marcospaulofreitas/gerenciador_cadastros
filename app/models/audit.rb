@@ -8,6 +8,9 @@ class Audit < ApplicationRecord
 
   scope :recent, -> { order(created_at: :desc) }
   scope :limit_recent, ->(limit = 10) { recent.limit(limit) }
+  scope :pendentes, -> { where(aprovado: false) }
+  scope :aprovadas, -> { where(aprovado: true) }
+  scope :by_tecnicos, -> { where.not(tecnico_id: nil) }
 
   def performer
     user || tecnico
@@ -43,5 +46,17 @@ class Audit < ApplicationRecord
     when 'destroy' then 'Inativação'
     else action.humanize
     end
+  end
+  
+  def pendente?
+    !aprovado?
+  end
+  
+  def aprovar!
+    update!(aprovado: true)
+  end
+  
+  def feito_por_tecnico?
+    tecnico_id.present?
   end
 end

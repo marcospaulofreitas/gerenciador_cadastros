@@ -45,8 +45,9 @@ class RevendasController < ApplicationController
   end
 
   def revenda_params
-    params.require(:revenda).permit(:nome_fantasia, :razao_social, :cnpj, :endereco, 
-                                   :cidade, :uf, :cep, :telefone, :email, :classificacao,
-                                   :gerente_contas_id, :active)
+    params.require(:revenda).permit(:nome_fantasia, :razao_social, :cnpj, :tipo_contato,
+                                   :telefone_suporte, :email_suporte, :responsavel, :cep,
+                                   :logradouro, :numero, :complemento, :bairro, :cidade, 
+                                   :uf, :classificacao, :gerente_contas_id, :active)
   end
 end

@@ -30,6 +30,9 @@ module Auditable
     current_user = get_current_user
     current_tecnico = get_current_tecnico
     
+    # Alterações de técnicos ficam pendentes, de usuários webposto são aprovadas
+    aprovado = current_tecnico.nil?
+    
     audits.create!(
       user: current_user,
       tecnico: current_tecnico,
@@ -37,7 +40,8 @@ module Auditable
       field_changes: changes.to_json,
       ip_address: get_current_ip,
       user_agent: get_current_user_agent,
-      performed_by: get_performer_name(current_user, current_tecnico)
+      performed_by: get_performer_name(current_user, current_tecnico),
+      aprovado: aprovado
     )
   rescue => e
     Rails.logger.error "Erro ao criar audit: #{e.message}"

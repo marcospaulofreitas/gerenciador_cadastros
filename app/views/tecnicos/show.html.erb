@@ -1,0 +1,105 @@
+<div class="mb-2">
+  <%= link_to revenda_tecnicos_path(@revenda), class: "btn btn-outline-secondary btn-sm" do %>
+    <i class="fas fa-arrow-left me-1"></i>Voltar
+  <% end %>
+</div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="text-primary mb-0">
+    <i class="fas fa-user me-2"></i><%= @tecnico.name %>
+  </h3>
+  <div>
+    <%= link_to edit_revenda_tecnico_path(@revenda, @tecnico), class: "btn btn-primary me-2" do %>
+      <i class="fas fa-edit me-1"></i>Alterar
+    <% end %>
+    <%= link_to revenda_tecnico_path(@revenda, @tecnico), method: :delete, class: "btn btn-danger", 
+        data: { confirm: "Tem certeza que deseja inativar este técnico?" } do %>
+      <i class="fas fa-trash me-1"></i>Excluir
+    <% end %>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Dados Pessoais -->
+  <div class="col-md-6">
+    <div class="card floating-card h-100">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-user me-2"></i>Dados Pessoais</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label fw-bold">Nome:</label>
+            <p class="mb-2"><%= @tecnico.name %></p>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold">Email:</label>
+            <p class="mb-2"><%= @tecnico.email %></p>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold">Telefone:</label>
+            <p class="mb-2"><%= @tecnico.telefone %></p>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold">Username:</label>
+            <p class="mb-2"><%= @tecnico.username %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dados Profissionais -->
+  <div class="col-md-6">
+    <div class="card floating-card h-100">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-briefcase me-2"></i>Dados Profissionais</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label fw-bold">Função:</label>
+            <p class="mb-2"><%= @tecnico.funcao_humanized %></p>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold">Perfil de Acesso:</label>
+            <p class="mb-2">
+              <span class="badge bg-<%= @tecnico.administrador? ? 'primary' : 'secondary' %> fs-6">
+                <%= @tecnico.perfil_acesso.humanize %>
+              </span>
+            </p>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold">Especialista:</label>
+            <p class="mb-2">
+              <% if @tecnico.especialista? %>
+                <i class="fas fa-star text-warning me-1"></i>Sim
+              <% else %>
+                <i class="fas fa-star text-muted me-1"></i>Não
+              <% end %>
+            </p>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold">Status:</label>
+            <p class="mb-2">
+              <span class="badge bg-<%= @tecnico.active? ? 'success' : 'danger' %> fs-6">
+                <%= @tecnico.active? ? 'Ativo' : 'Inativo' %>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenda -->
+  <div class="col-12">
+    <div class="card floating-card">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-store me-2"></i>Revenda</h5>
+      </div>
+      <div class="card-body">
+        <p class="mb-0"><%= @tecnico.revenda.nome_fantasia %> - <%= @tecnico.revenda.cnpj_formatted %></p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -43,19 +43,25 @@
   <!-- Cartão Revendas -->
   <div class="col-lg-3 col-md-6">
     <div class="card h-100 floating-card card-hover">
-      <div class="card-body text-center p-4">
-        <div class="card-icon mb-3">
-          <i class="fas fa-store fa-3x text-primary"></i>
+      <div class="card-body text-center p-3">
+        <div class="card-icon mb-2">
+          <i class="fas fa-store fa-2x text-primary"></i>
         </div>
-        <h5 class="card-title fw-bold mb-2">Revendas</h5>
-        <p class="card-text text-muted mb-4"><span class="fw-bold text-primary"><%= @revendas_count %></span> cadastradas</p>
-        <div class="d-grid gap-2">
-          <%= link_to revendas_path, class: "btn btn-primary" do %>
-            <i class="fas fa-cog me-1"></i>Gerenciar
-          <% end %>
-          <%= link_to new_revenda_path, class: "btn btn-outline-primary" do %>
-            <i class="fas fa-plus me-1"></i>Nova +
-          <% end %>
+        <h6 class="card-title fw-bold mb-1">Revendas Ativas</h6>
+        <h3 class="text-primary fw-bold mb-3"><%= @revendas_count %></h3>
+        <div class="d-grid gap-1">
+          <div class="row g-1">
+            <div class="col-6">
+              <%= link_to revendas_path, class: "btn btn-outline-primary btn-sm w-100" do %>
+                <i class="fas fa-cog"></i><br><small>Gerenciar</small>
+              <% end %>
+            </div>
+            <div class="col-6">
+              <%= link_to new_revenda_path(from: 'dashboard'), class: "btn btn-outline-primary btn-sm w-100" do %>
+                <i class="fas fa-plus"></i><br><small>Nova</small>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -64,19 +70,25 @@
   <!-- Cartão Técnicos -->
   <div class="col-lg-3 col-md-6">
     <div class="card h-100 floating-card card-hover">
-      <div class="card-body text-center p-4">
-        <div class="card-icon mb-3">
-          <i class="fas fa-tools fa-3x text-success"></i>
+      <div class="card-body text-center p-3">
+        <div class="card-icon mb-2">
+          <i class="fas fa-tools fa-2x text-success"></i>
         </div>
-        <h5 class="card-title fw-bold mb-2">Técnicos</h5>
-        <p class="card-text text-muted mb-4"><span class="fw-bold text-success"><%= @tecnicos_count %></span> ativos</p>
-        <div class="d-grid gap-2">
-          <%= link_to "#", class: "btn btn-success" do %>
-            <i class="fas fa-cog me-1"></i>Gerenciar
-          <% end %>
-          <%= link_to "#", class: "btn btn-outline-success" do %>
-            <i class="fas fa-plus me-1"></i>Novo +
-          <% end %>
+        <h6 class="card-title fw-bold mb-1">Técnicos Ativos</h6>
+        <h3 class="text-success fw-bold mb-3"><%= @tecnicos_count %></h3>
+        <div class="d-grid gap-1">
+          <div class="row g-1">
+            <div class="col-6">
+              <%= link_to "#", class: "btn btn-outline-success btn-sm w-100" do %>
+                <i class="fas fa-cog"></i><br><small>Gerenciar</small>
+              <% end %>
+            </div>
+            <div class="col-6">
+              <%= link_to "#", class: "btn btn-outline-success btn-sm w-100" do %>
+                <i class="fas fa-plus"></i><br><small>Novo</small>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -85,19 +97,56 @@
   <!-- Cartão Usuários -->
   <div class="col-lg-3 col-md-6">
     <div class="card h-100 floating-card card-hover">
-      <div class="card-body text-center p-4">
-        <div class="card-icon mb-3">
-          <i class="fas fa-users fa-3x text-info"></i>
+      <div class="card-body text-center p-3">
+        <div class="card-icon mb-2">
+          <i class="fas fa-users fa-2x text-info"></i>
         </div>
-        <h5 class="card-title fw-bold mb-2">Usuários</h5>
-        <p class="card-text text-muted mb-4"><span class="fw-bold text-info"><%= @users_count %></span> registrados</p>
-        <div class="d-grid gap-2">
-          <%= link_to users_path, class: "btn btn-info" do %>
-            <i class="fas fa-cog me-1"></i>Gerenciar
-          <% end %>
-          <%= link_to new_user_path, class: "btn btn-outline-info" do %>
-            <i class="fas fa-plus me-1"></i>Novo +
-          <% end %>
+        <h6 class="card-title fw-bold mb-1">Usuários Ativos</h6>
+        <h3 class="text-info fw-bold mb-3"><%= @users_count %></h3>
+        <div class="d-grid gap-1">
+          <div class="row g-1">
+            <div class="col-6">
+              <%= link_to users_path, class: "btn btn-outline-info btn-sm w-100" do %>
+                <i class="fas fa-cog"></i><br><small>Gerenciar</small>
+              <% end %>
+            </div>
+            <div class="col-6">
+              <%= link_to new_user_path, class: "btn btn-outline-info btn-sm w-100" do %>
+                <i class="fas fa-plus"></i><br><small>Novo</small>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Segunda linha de cartões -->
+<div class="row g-4 mt-2">
+  <!-- Cartão Pendências -->
+  <div class="col-lg-3 col-md-6">
+    <div class="card h-100 floating-card card-hover">
+      <div class="card-body text-center p-3">
+        <div class="card-icon mb-2">
+          <i class="fas fa-clock fa-2x text-warning"></i>
+        </div>
+        <h6 class="card-title fw-bold mb-1">Pendências</h6>
+        <h3 class="text-warning fw-bold mb-3"><%= @pendencias_count %></h3>
+        <div class="d-grid gap-1">
+          <div class="row g-1">
+            <div class="col-6">
+              <%= link_to audits_path, class: "btn btn-outline-warning btn-sm w-100" do %>
+                <i class="fas fa-list"></i><br><small>Listar</small>
+              <% end %>
+            </div>
+            <div class="col-6">
+              <%= link_to approve_all_audits_path, method: :patch, class: "btn btn-outline-warning btn-sm w-100", 
+                  data: { confirm: "Aprovar todas as pendências?" } do %>
+                <i class="fas fa-check"></i><br><small>Aprovar</small>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -106,59 +155,83 @@
   <!-- Cartão Relatórios -->
   <div class="col-lg-3 col-md-6">
     <div class="card h-100 floating-card card-hover">
-      <div class="card-body text-center p-4">
-        <div class="card-icon mb-3">
-          <i class="fas fa-chart-bar fa-3x text-warning"></i>
+      <div class="card-body text-center p-3">
+        <div class="card-icon mb-2">
+          <i class="fas fa-chart-bar fa-2x text-secondary"></i>
         </div>
-        <h5 class="card-title fw-bold mb-2">Relatórios</h5>
-        <p class="card-text text-muted mb-4">Extrair dados do sistema</p>
-        <div class="d-grid gap-2">
-          <%= link_to "#", class: "btn btn-warning" do %>
-            <i class="fas fa-file-alt me-1"></i>Gerar Relatório
-          <% end %>
-          <%= link_to "#", class: "btn btn-outline-warning" do %>
-            <i class="fas fa-download me-1"></i>Exportar Dados
-          <% end %>
+        <h6 class="card-title fw-bold mb-1">Relatórios</h6>
+        <h3 class="text-secondary fw-bold mb-3">-</h3>
+        <div class="d-grid gap-1">
+          <div class="row g-1">
+            <div class="col-6">
+              <%= link_to "#", class: "btn btn-outline-secondary btn-sm w-100" do %>
+                <i class="fas fa-file-alt"></i><br><small>Gerar</small>
+              <% end %>
+            </div>
+            <div class="col-6">
+              <%= link_to "#", class: "btn btn-outline-secondary btn-sm w-100" do %>
+                <i class="fas fa-download"></i><br><small>Exportar</small>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Estatísticas Rápidas -->
+<!-- Filtros de Auditoria -->
 <div class="row mt-5">
   <div class="col-12">
-    <div class="card stats-card floating-card">
-      <div class="card-header">
-        <h5 class="mb-0 text-white"><i class="fas fa-tachometer-alt me-2"></i>Visão Geral do Sistema</h5>
+    <div class="card floating-card">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtros de Auditoria</h5>
       </div>
       <div class="card-body">
-        <div class="row text-center">
+        <%= form_with url: webposto_dashboard_path, method: :get, local: true, class: "row g-3" do |f| %>
           <div class="col-md-3">
-            <div class="stat-item">
-              <h3 class="text-white"><%= @revendas_count %></h3>
-              <p class="text-white-50">Total de Revendas</p>
+            <%= f.label :user_id, "Usuário", class: "form-label" %>
+            <%= f.select :user_id, options_from_collection_for_select(User.active.order(:name), :id, :name, params[:user_id]), 
+                { prompt: "Todos os usuários" }, { class: "form-select" } %>
+          </div>
+          
+          <div class="col-md-3">
+            <%= f.label :auditable_type, "Tipo de Registro", class: "form-label" %>
+            <%= f.select :auditable_type, options_for_select([
+              ['Todos', ''],
+              ['Usuários', 'User'],
+              ['Revendas', 'Revenda'],
+              ['Técnicos', 'Tecnico']
+            ], params[:auditable_type]), {}, { class: "form-select" } %>
+          </div>
+          
+          <div class="col-md-2">
+            <%= f.label :action, "Ação", class: "form-label" %>
+            <%= f.select :action, options_for_select([
+              ['Todas', ''],
+              ['Criação', 'create'],
+              ['Atualização', 'update'],
+              ['Inativação', 'destroy']
+            ], params[:action]), {}, { class: "form-select" } %>
+          </div>
+          
+          <div class="col-md-2">
+            <%= f.label :date_from, "Data Inicial", class: "form-label" %>
+            <%= f.date_field :date_from, value: params[:date_from], class: "form-control" %>
+          </div>
+          
+          <div class="col-md-2">
+            <%= f.label :date_to, "Data Final", class: "form-label" %>
+            <%= f.date_field :date_to, value: params[:date_to], class: "form-control" %>
+          </div>
+          
+          <div class="col-12">
+            <div class="d-flex gap-2">
+              <%= f.submit "Filtrar", class: "btn btn-primary" %>
+              <%= link_to "Limpar", webposto_dashboard_path, class: "btn btn-outline-secondary" %>
             </div>
           </div>
-          <div class="col-md-3">
-            <div class="stat-item">
-              <h3 class="text-white"><%= @tecnicos_count %></h3>
-              <p class="text-white-50">Técnicos Cadastrados</p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="stat-item">
-              <h3 class="text-white"><%= @users_count %></h3>
-              <p class="text-white-50">Usuários Ativos</p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="stat-item">
-              <h3 class="text-white">100%</h3>
-              <p class="text-white-50">Sistema Online</p>
-            </div>
-          </div>
-        </div>
+        <% end %>
       </div>
     </div>
   </div>
@@ -172,7 +245,7 @@
         <h5 class="mb-0"><i class="fas fa-history me-2"></i>Atividades Recentes</h5>
       </div>
       <div class="card-body">
-        <% if @recent_audits.any? %>
+        <% if @recent_audits&.any? %>
           <div class="table-responsive">
             <table class="table table-hover">
               <thead>
@@ -181,6 +254,7 @@
                   <th>Ação</th>
                   <th>Item</th>
                   <th>Alterações</th>
+                  <th>Status</th>
                   <th>Data/Hora</th>
                 </tr>
               </thead>
@@ -195,6 +269,15 @@
                     </td>
                     <td><small><%= audit.auditable_type %> #<%= audit.auditable_id %></small></td>
                     <td><small><%= truncate(audit.changes_summary, length: 50) %></small></td>
+                    <td>
+                      <% if audit.feito_por_tecnico? %>
+                        <span class="badge bg-<%= audit.aprovado? ? 'success' : 'warning' %>">
+                          <%= audit.aprovado? ? 'Aprovado' : 'Pendente' %>
+                        </span>
+                      <% else %>
+                        <span class="badge bg-primary">Auto-aprovado</span>
+                      <% end %>
+                    </td>
                     <td><small><%= audit.created_at.strftime("%d/%m/%Y %H:%M") %></small></td>
                   </tr>
                 <% end %>

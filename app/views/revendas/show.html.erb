@@ -1,0 +1,158 @@
+<div class="mb-2">
+  <%= link_to revendas_path, class: "btn btn-outline-secondary btn-sm" do %>
+    <i class="fas fa-arrow-left me-1"></i>Voltar
+  <% end %>
+</div>
+<div class="mb-3">
+  <h3 class="text-primary mb-0">
+    <i class="fas fa-store me-2"></i><%= @revenda.nome_fantasia %>
+  </h3>
+</div>
+
+<!-- Cartões Lado a Lado -->
+<div class="row g-3 mb-3">
+  <!-- Cartão Informações da Revenda -->
+  <div class="col-md-6">
+    <div class="card floating-card h-100">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center" style="height: 45px;">
+        <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informações da Revenda</h6>
+        <div class="d-flex gap-1">
+          <%= link_to edit_revenda_path(@revenda), class: "btn btn-warning btn-sm", style: "height: 30px; font-size: 0.75rem; padding: 4px 10px;",
+              title: "Alterar dados da revenda", data: { bs_toggle: "tooltip", bs_placement: "bottom" } do %>
+            <i class="fas fa-edit me-1"></i>Alterar
+          <% end %>
+          <%= link_to @revenda, method: :delete, class: "btn btn-outline-light btn-sm", style: "height: 30px; font-size: 0.75rem; padding: 4px 10px; border-color: #fff;",
+              title: "Inativar esta revenda", data: { bs_toggle: "tooltip", bs_placement: "bottom", confirm: "Tem certeza que deseja inativar esta revenda?" } do %>
+            <i class="fas fa-trash me-1"></i>Excluir
+          <% end %>
+        </div>
+      </div>
+      <div class="card-body p-2">
+        <div class="row g-1">
+          <!-- CNPJ e Razão Social -->
+          <div class="col-6">
+            <small class="text-muted" style="font-size: 0.7rem;">CNPJ:</small><br>
+            <strong style="font-size: 0.75rem;"><%= @revenda.cnpj_formatted %></strong>
+          </div>
+          <div class="col-6">
+            <small class="text-muted" style="font-size: 0.7rem;">Razão Social:</small><br>
+            <strong style="font-size: 0.75rem;"><%= @revenda.razao_social %></strong>
+          </div>
+          
+          <!-- Fantasia e Responsável -->
+          <div class="col-6">
+            <small class="text-muted" style="font-size: 0.7rem;">Nome Fantasia:</small><br>
+            <strong style="font-size: 0.75rem;"><%= @revenda.nome_fantasia %></strong>
+          </div>
+          <div class="col-6">
+            <small class="text-muted" style="font-size: 0.7rem;">Responsável:</small><br>
+            <strong style="font-size: 0.75rem;"><%= @revenda.responsavel %></strong>
+          </div>
+          
+          <div class="col-6">
+            <small class="text-muted" style="font-size: 0.7rem;">Tipo:</small><br>
+            <strong style="font-size: 0.75rem;"><%= @revenda.tipo_contato.humanize %></strong>
+          </div>
+          <div class="col-6">
+            <small class="text-muted" style="font-size: 0.7rem;">Telefone:</small><br>
+            <strong style="font-size: 0.75rem;"><%= @revenda.telefone_suporte %></strong>
+          </div>
+          <div class="col-12">
+            <small class="text-muted" style="font-size: 0.7rem;">Email:</small><br>
+            <strong style="font-size: 0.75rem;"><%= @revenda.email_suporte %></strong>
+          </div>
+          <div class="col-12">
+            <small class="text-muted" style="font-size: 0.7rem;">Endereço:</small><br>
+            <strong style="font-size: 0.75rem;"><%= @revenda.endereco_completo %></strong>
+          </div>
+          
+          <!-- Gerente da Conta e Classificação -->
+          <div class="col-6">
+            <small class="text-muted" style="font-size: 0.7rem;">Gerente da Conta:</small><br>
+            <strong style="font-size: 0.75rem;"><%= @revenda.gerente_contas.name %></strong>
+          </div>
+          <div class="col-6">
+            <small class="text-muted" style="font-size: 0.7rem;">Classificação:</small><br>
+            <span class="badge bg-<%= case @revenda.classificacao
+              when 'diamante' then 'primary'
+              when 'ouro' then 'warning'
+              when 'prata' then 'secondary'
+              when 'bronze' then 'dark'
+              else 'light'
+            end %>" style="font-size: 0.65rem;"><%= @revenda.classificacao.humanize %></span>
+          </div>
+          
+          <!-- Status -->
+          <div class="col-12">
+            <small class="text-muted" style="font-size: 0.7rem;">Status:</small><br>
+            <span class="badge bg-success" style="font-size: 0.65rem;">Ativo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Cartão Técnicos -->
+  <div class="col-md-6">
+    <div class="card floating-card h-100">
+      <div class="card-header bg-success text-white d-flex justify-content-between align-items-center" style="height: 45px;">
+        <h6 class="mb-0"><i class="fas fa-users me-2"></i>Técnicos da Revenda</h6>
+        <%= link_to new_revenda_tecnico_path(@revenda), class: "btn btn-sm", 
+            style: "height: 30px; font-size: 0.75rem; padding: 4px 10px; background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3);",
+            onmouseover: "this.style.background='white'; this.style.color='black';",
+            onmouseout: "this.style.background='transparent'; this.style.color='white';",
+            title: "Cadastrar novo técnico", data: { bs_toggle: "tooltip", bs_placement: "bottom" } do %>
+          <i class="fas fa-plus me-1"></i>Novo
+        <% end %>
+      </div>
+      <div class="card-body p-2">
+        <% if @revenda.tecnicos.active.any? %>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead>
+                <tr style="font-size: 0.8rem;">
+                  <th>Nome</th>
+                  <th>Função</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @revenda.tecnicos.active.each do |tecnico| %>
+                  <tr style="font-size: 0.75rem;">
+                    <td><strong><%= tecnico.name %></strong></td>
+                    <td><%= tecnico.funcao_humanized %></td>
+                    <td>
+                      <div class="d-flex gap-1">
+                        <%= link_to revenda_tecnico_path(@revenda, tecnico), class: "btn btn-outline-info btn-sm", 
+                            style: "font-size: 0.65rem; padding: 1px 4px; height: 22px; width: 24px;",
+                            title: "Visualizar dados do técnico", data: { bs_toggle: "tooltip", bs_placement: "top" } do %>
+                          <i class="fas fa-eye"></i>
+                        <% end %>
+                        <%= link_to edit_revenda_tecnico_path(@revenda, tecnico), class: "btn btn-outline-primary btn-sm", 
+                            style: "font-size: 0.65rem; padding: 1px 4px; height: 22px; width: 24px;",
+                            title: "Editar dados do técnico", data: { bs_toggle: "tooltip", bs_placement: "top" } do %>
+                          <i class="fas fa-edit"></i>
+                        <% end %>
+                        <%= link_to revenda_tecnico_path(@revenda, tecnico), method: :delete, 
+                            class: "btn btn-outline-danger btn-sm", style: "font-size: 0.65rem; padding: 1px 4px; height: 22px; width: 24px;",
+                            title: "Inativar este técnico", data: { bs_toggle: "tooltip", bs_placement: "top", confirm: "Inativar este técnico?" } do %>
+                          <i class="fas fa-trash"></i>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <div class="text-center text-muted py-2">
+            <i class="fas fa-users fa-lg mb-1"></i>
+            <p class="mb-0" style="font-size: 0.8rem;">Nenhum técnico cadastrado.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,27 +1,27 @@
 class TecnicosController < ApplicationController
+  before_action :set_revenda
   before_action :set_tecnico, only: [:show, :edit, :update, :destroy]
   before_action :check_admin_access, only: [:new, :create, :edit, :update, :destroy]
   
   def index
-    if session[:access_type] == 'revenda'
-      @tecnicos = current_revenda.tecnicos.active
-    else
-      @tecnicos = Tecnico.active.includes(:revenda)
-    end
+    @tecnicos = @revenda.tecnicos.active
+  end
+
+  def show
   end
 
   def show
   end
 
   def new
-    @tecnico = current_revenda.tecnicos.build
+    @tecnico = @revenda.tecnicos.build
   end
 
   def create
-    @tecnico = current_revenda.tecnicos.build(tecnico_params)
+    @tecnico = @revenda.tecnicos.build(tecnico_params)
     
     if @tecnico.save
-      redirect_to @tecnico, notice: 'Técnico criado com sucesso.'
+      redirect_to revenda_tecnico_path(@revenda, @tecnico), notice: 'Técnico criado com sucesso.'
     else
       render :new
     end
@@ -32,7 +32,7 @@ class TecnicosController < ApplicationController
 
   def update
     if @tecnico.update(tecnico_params)
-      redirect_to @tecnico, notice: 'Técnico atualizado com sucesso.'
+      redirect_to revenda_tecnico_path(@revenda, @tecnico), notice: 'Técnico atualizado com sucesso.'
     else
       render :edit
     end
@@ -40,13 +40,17 @@ class TecnicosController < ApplicationController
 
   def destroy
     @tecnico.update(active: false)
-    redirect_to tecnicos_path, notice: 'Técnico inativado com sucesso.'
+    redirect_to revenda_tecnicos_path(@revenda), notice: 'Técnico inativado com sucesso.'
   end
 
   private
 
+  def set_revenda
+    @revenda = Revenda.find(params[:revenda_id])
+  end
+
   def set_tecnico
-    @tecnico = Tecnico.find(params[:id])
+    @tecnico = @revenda.tecnicos.find(params[:id])
   end
 
   def check_admin_access

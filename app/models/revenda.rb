@@ -15,7 +15,7 @@ class Revenda < ApplicationRecord
   validates :telefone_suporte, presence: true
   validates :email_suporte, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :responsavel, presence: true
-  validates :cep, presence: true
+  validates :cep, presence: true, format: { with: /\A\d{5}-\d{3}\z/, message: "deve estar no formato 00000-000" }
   validates :logradouro, presence: true
   validates :numero, presence: true
   validates :bairro, presence: true
@@ -24,6 +24,7 @@ class Revenda < ApplicationRecord
   validates :classificacao, inclusion: { in: CLASSIFICACOES }
   validates :gerente_contas_id, presence: true
   validate :cnpj_must_be_valid
+  validate :telefone_format_must_be_valid
 
   scope :active, -> { where(active: true) }
   scope :by_classificacao, ->(classificacao) { where(classificacao: classificacao) }
@@ -47,6 +48,25 @@ class Revenda < ApplicationRecord
     cnpj_numbers = cnpj.gsub(/\D/, '')
     unless cnpj_numbers.length == 14
       errors.add(:cnpj, 'deve ter 14 dígitos')
+    end
+  end
+  
+  def telefone_format_must_be_valid
+    return if telefone_suporte.blank? || tipo_contato.blank?
+    
+    case tipo_contato
+    when 'celular'
+      unless telefone_suporte.match?(/\A\(\d{2}\) \d{5}-\d{4}\z/)
+        errors.add(:telefone_suporte, 'deve estar no formato (00) 00000-0000 para celular')
+      end
+    when 'fixo'
+      unless telefone_suporte.match?(/\A\(\d{2}\) \d{4}-\d{4}\z/)
+        errors.add(:telefone_suporte, 'deve estar no formato (00) 0000-0000 para fixo')
+      end
+    when '0800'
+      unless telefone_suporte.match?(/\A\d{4}-\d{3}-\d{4}\z/)
+        errors.add(:telefone_suporte, 'deve estar no formato 0000-000-0000 para 0800')
+      end
     end
   end
 end

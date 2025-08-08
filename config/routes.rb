@@ -27,6 +27,14 @@ Rails.application.routes.draw do
   end
   resources :users, except: [:show]
   resources :user_profiles, only: [:index]
+  resources :audits, only: [:index] do
+    member do
+      patch :approve
+    end
+    collection do
+      patch :approve_all
+    end
+  end
 
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check

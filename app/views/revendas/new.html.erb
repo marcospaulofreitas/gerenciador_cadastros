@@ -1,0 +1,131 @@
+<div class="mb-2">
+  <%= link_to (params[:from] == 'dashboard' ? webposto_dashboard_path : revendas_path), class: "btn btn-outline-secondary btn-sm" do %>
+    <i class="fas fa-arrow-left me-1"></i>Voltar
+  <% end %>
+</div>
+<div class="mb-3">
+  <h3 class="text-primary mb-0">
+    <i class="fas fa-store me-2"></i>Nova Revenda
+  </h3>
+</div>
+
+<div class="card floating-card">
+  <div class="card-body p-2">
+    <%= form_with model: @revenda, local: true, class: "row g-1" do |f| %>
+      <% if @revenda.errors.any? %>
+        <div class="col-12">
+          <div class="alert alert-danger">
+            <h6>Erro ao salvar:</h6>
+            <ul class="mb-0">
+              <% @revenda.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="col-md-3">
+        <%= f.label :cnpj, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :cnpj, class: "form-control cnpj-mask", style: "font-size: 0.8rem; height: 28px;", placeholder: "00.000.000/0000-00" %>
+      </div>
+
+      <div class="col-md-9">
+        <%= f.label :razao_social, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :razao_social, class: "form-control", style: "font-size: 0.8rem; height: 28px;" %>
+      </div>
+
+      <div class="col-md-5">
+        <%= f.label :nome_fantasia, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :nome_fantasia, class: "form-control", style: "font-size: 0.8rem; height: 28px;" %>
+      </div>
+
+      <div class="col-md-3">
+        <%= f.label :classificacao, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.select :classificacao, options_for_select(Revenda::CLASSIFICACOES.map { |c| [c.humanize, c] }), 
+            { prompt: "Selecione..." }, { class: "form-select", style: "font-size: 0.8rem; height: 28px;" } %>
+      </div>
+
+      <div class="col-md-4">
+        <%= f.label :gerente_contas_id, "Gerente", class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.select :gerente_contas_id, options_from_collection_for_select(User.gerentes_contas, :id, :name), 
+            { prompt: "Selecione..." }, { class: "form-select", style: "font-size: 0.8rem; height: 28px;" } %>
+      </div>
+
+      <div class="col-md-4">
+        <%= f.label :email_suporte, "Email", class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.email_field :email_suporte, class: "form-control", style: "font-size: 0.8rem; height: 28px;" %>
+      </div>
+
+      <div class="col-md-3">
+        <%= f.label :telefone_suporte, "Telefone", class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :telefone_suporte, class: "form-control", style: "font-size: 0.8rem; height: 28px;", id: "telefone_suporte" %>
+      </div>
+
+      <div class="col-md-3">
+        <%= f.label :tipo_contato, "Tipo", class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.select :tipo_contato, options_for_select(Revenda::TIPOS_CONTATO.map { |t| [t.humanize, t] }), 
+            { prompt: "Selecione..." }, { class: "form-select", style: "font-size: 0.8rem; height: 28px;", onchange: "updatePhoneMask(this.value)" } %>
+      </div>
+
+      <div class="col-md-2">
+        <%= f.label :active, "Status", class: "form-label", style: "font-size: 0.75rem;" %>
+        <div class="form-check" style="margin-top: 4px;">
+          <%= f.check_box :active, class: "form-check-input", checked: true, style: "font-size: 0.8rem;" %>
+          <%= f.label :active, "Ativo", class: "form-check-label", style: "font-size: 0.75rem;" %>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <%= f.label :responsavel, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :responsavel, class: "form-control", style: "font-size: 0.8rem; height: 28px;" %>
+      </div>
+
+      <div class="col-md-2">
+        <%= f.label :cep, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :cep, class: "form-control cep-mask", style: "font-size: 0.8rem; height: 28px;", placeholder: "00000-000" %>
+      </div>
+
+      <div class="col-md-5">
+        <%= f.label :logradouro, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :logradouro, class: "form-control", style: "font-size: 0.8rem; height: 28px;" %>
+      </div>
+
+      <div class="col-md-2">
+        <%= f.label :numero, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :numero, class: "form-control", style: "font-size: 0.8rem; height: 28px;" %>
+      </div>
+
+      <div class="col-md-3">
+        <%= f.label :complemento, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :complemento, class: "form-control", style: "font-size: 0.8rem; height: 28px;" %>
+      </div>
+
+      <div class="col-md-4">
+        <%= f.label :bairro, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :bairro, class: "form-control", style: "font-size: 0.8rem; height: 28px;" %>
+      </div>
+
+      <div class="col-md-4">
+        <%= f.label :cidade, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :cidade, class: "form-control", style: "font-size: 0.8rem; height: 28px;" %>
+      </div>
+
+      <div class="col-md-2">
+        <%= f.label :uf, class: "form-label", style: "font-size: 0.75rem;" %>
+        <%= f.text_field :uf, class: "form-control", style: "font-size: 0.8rem; height: 28px;", maxlength: 2 %>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label" style="font-size: 0.75rem;">&nbsp;</label>
+      </div>
+
+      <div class="col-12 mt-2">
+        <div class="d-flex gap-2">
+          <%= f.submit "Salvar", class: "btn btn-success", style: "width: 80px; height: 32px; font-size: 0.85rem;" %>
+          <%= link_to "Cancelar", (params[:from] == 'dashboard' ? webposto_dashboard_path : revendas_path), class: "btn btn-secondary", style: "width: 80px; height: 32px; font-size: 0.85rem;" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
