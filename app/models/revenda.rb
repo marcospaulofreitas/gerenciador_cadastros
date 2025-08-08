@@ -1,4 +1,6 @@
 class Revenda < ApplicationRecord
+  include Auditable
+  
   CLASSIFICACOES = %w[diamante ouro prata bronze branca].freeze
   TIPOS_CONTATO = %w[celular fixo 0800].freeze
 

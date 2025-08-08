@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
+  before_action :set_current_context
   before_action :authenticate_user_or_tecnico!, unless: :public_action?
   before_action :check_revenda_access, if: :revenda_access?
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -50,7 +51,10 @@ class ApplicationController < ActionController::Base
   private
 
   def public_action?
-    devise_controller? || (controller_name == 'home' && action_name == 'index') || (controller_name == 'home' && action_name == 'validate_cnpj_name') || revenda_access?
+    devise_controller? || 
+    (controller_name == 'home' && action_name == 'index' && !user_signed_in? && !tecnico_signed_in?) || 
+    (controller_name == 'home' && action_name == 'validate_cnpj_name') || 
+    revenda_access?
   end
   
   def revenda_access?
@@ -71,5 +75,12 @@ class ApplicationController < ActionController::Base
   
   def authenticate_user!
     redirect_to root_path, alert: 'Para continuar, efetue login.' unless user_signed_in?
+  end
+  
+  def set_current_context
+    Current.user = current_user if user_signed_in?
+    Current.tecnico = current_tecnico if defined?(current_tecnico) && current_tecnico
+    Current.ip_address = request.remote_ip
+    Current.user_agent = request.user_agent
   end
 end

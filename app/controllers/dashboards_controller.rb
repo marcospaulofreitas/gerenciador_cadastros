@@ -30,5 +30,6 @@ class DashboardsController < ApplicationController
     @revendas_count = Revenda.count
     @tecnicos_count = Tecnico.active.count
     @users_count = User.active.count
+    @recent_audits = Audit.includes(:user, :tecnico, :auditable).limit_recent(10)
   end
 end

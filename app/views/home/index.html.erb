@@ -1,6 +1,6 @@
 <div class="main-container">
   <% if flash[:notice] %>
-    <div class="alert alert-success" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 9999; font-size: 0.8rem; padding: 0.5rem; max-width: 300px;">
+    <div class="alert alert-info" role="alert" style="position: fixed; top: 15px; right: 20px; z-index: 9999; font-size: 0.8rem; padding: 0.5rem; max-width: 300px;">
       <%= flash[:notice] %>
     </div>
   <% end %>
@@ -35,7 +35,7 @@
 </div>
 
 <script>
-// Auto-hide alerts após 4 segundos
+// Auto-hide alerts após 3 segundos
 document.addEventListener('DOMContentLoaded', function() {
   const alerts = document.querySelectorAll('.alert');
   alerts.forEach(function(alert) {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }, 500);
       }
-    }, 4000);
+    }, 3000);
   });
 });
 
@@ -67,7 +67,7 @@ document.addEventListener('turbo:load', function() {
           }
         }, 500);
       }
-    }, 4000);
+    }, 3000);
   });
 });
 </script>

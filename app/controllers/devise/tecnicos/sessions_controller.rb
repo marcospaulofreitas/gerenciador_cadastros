@@ -1,4 +1,6 @@
 class Devise::Tecnicos::SessionsController < Devise::SessionsController
+  before_action :redirect_if_authenticated, only: [:new]
+  
   def new
     self.resource = resource_class.new
     clean_up_passwords(resource)
@@ -66,5 +68,17 @@ class Devise::Tecnicos::SessionsController < Devise::SessionsController
 
   def sign_in_params
     params.require(:tecnico).permit(:username, :password, :remember_me, :cnpj)
+  end
+  
+  private
+  
+  def redirect_if_authenticated
+    if user_signed_in? && session[:access_type] == 'webposto'
+      flash[:info] = 'Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro.'
+      redirect_to webposto_dashboard_path
+    elsif tecnico_signed_in? && session[:access_type] == 'revenda'
+      flash[:info] = 'Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro.'
+      redirect_to revenda_dashboard_path
+    end
   end
 end

@@ -1,6 +1,7 @@
 class Devise::SessionsController < DeviseController
   prepend_before_action :require_no_authentication, only: [:new, :create]
   prepend_before_action :allow_params_authentication!, only: :create
+  before_action :redirect_if_authenticated, only: [:new]
 
   prepend_before_action(only: [:create, :destroy]) { request.env["devise.skip_timeout"] = true }
 
@@ -71,5 +72,17 @@ class Devise::SessionsController < DeviseController
 
   def translation_scope
     'devise.sessions'
+  end
+  
+  private
+  
+  def redirect_if_authenticated
+    if user_signed_in? && session[:access_type] == 'webposto'
+      flash[:info] = 'Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro.'
+      redirect_to webposto_dashboard_path
+    elsif defined?(tecnico_signed_in?) && tecnico_signed_in? && session[:access_type] == 'revenda'
+      flash[:info] = 'Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro.'
+      redirect_to revenda_dashboard_path
+    end
   end
 end

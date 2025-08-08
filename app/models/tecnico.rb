@@ -1,4 +1,6 @@
 class Tecnico < ApplicationRecord
+  include Auditable
+  
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :timeoutable
          

@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  before_action :redirect_if_authenticated, only: [:index]
+  
   def index
     # Tela inicial com botões Revenda e WebPosto
   end
@@ -35,6 +37,19 @@ class HomeController < ApplicationController
   end
 
   private
+  
+  def redirect_if_authenticated
+    if user_signed_in? && session[:access_type] == 'webposto'
+      flash[:info] = 'Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro.'
+      redirect_to webposto_dashboard_path
+    elsif tecnico_signed_in? && session[:access_type] == 'revenda'
+      flash[:info] = 'Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro.'
+      redirect_to revenda_dashboard_path
+    elsif session[:access_type].present?
+      # Limpar sessão inválida
+      session.clear
+    end
+  end
 
   def sanitize_cnpj(cnpj)
     return '' if cnpj.blank?

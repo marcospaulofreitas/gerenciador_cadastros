@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_07_202950) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_08_125256) do
   create_table "audits", force: :cascade do |t|
     t.integer "user_id"
     t.integer "tecnico_id"
     t.string "auditable_type", null: false
     t.integer "auditable_id", null: false
-    t.string "action", null: false
+    t.string "action"
     t.text "field_changes"
     t.string "ip_address"
     t.string "user_agent"
@@ -24,8 +24,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_07_202950) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["auditable_type", "auditable_id"], name: "index_audits_on_auditable"
-    t.index ["auditable_type", "auditable_id"], name: "index_audits_on_auditable_type_and_auditable_id"
-    t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["tecnico_id"], name: "index_audits_on_tecnico_id"
     t.index ["user_id"], name: "index_audits_on_user_id"
   end
