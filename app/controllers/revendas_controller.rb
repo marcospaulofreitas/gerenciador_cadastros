@@ -3,6 +3,7 @@ class RevendasController < ApplicationController
   
   def index
     @revendas = filter_revendas
+    @gerentes = User.gerentes_contas.order(:name)
     
     if request.xhr?
       render partial: 'table', locals: { revendas: @revendas }, layout: false
@@ -71,6 +72,11 @@ class RevendasController < ApplicationController
       revendas = revendas.where(active: false)
     else
       revendas = revendas # todas
+    end
+    
+    # Filtro por gerente de contas
+    if params[:gerente].present?
+      revendas = revendas.where(gerente_contas_id: params[:gerente])
     end
     
     # Filtro por busca (nome ou CNPJ)
