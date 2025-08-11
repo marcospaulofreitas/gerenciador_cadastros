@@ -23,6 +23,9 @@ Rails.application.routes.draw do
 
   # Recursos para WebPosto
   resources :revendas do
+    member do
+      patch :toggle_status
+    end
     resources :tecnicos, except: [:show]
   end
   resources :users, except: [:show]

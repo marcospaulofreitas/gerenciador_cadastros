@@ -2,25 +2,21 @@
   <div class="table-responsive">
     <table class="table table-sm table-hover mb-0">
       <thead>
-        <tr style="font-size: 0.85rem;">
+        <tr style="font-size: 0.85rem; text-align: center;">
           <th>CNPJ</th>
           <th>Nome Fantasia</th>
-          <th>Status</th>
           <th>Classificação</th>
-          <th>Gerente</th>
+          <th>Gerente de Contas</th>
+          <th>Técnicos</th>
+          <th>Status</th>
           <th>Ações</th>
         </tr>
       </thead>
       <tbody>
         <% revendas.each do |revenda| %>
-          <tr style="font-size: 0.8rem;">
+          <tr style="font-size: 0.8rem; text-align: center;">
             <td><%= revenda.cnpj_formatted %></td>
             <td><%= revenda.nome_fantasia %></td>
-            <td>
-              <span class="badge <%= revenda.active? ? 'bg-success' : 'bg-danger' %>" style="font-size: 0.7rem;">
-                <%= revenda.active? ? 'Ativa' : 'Inativa' %>
-              </span>
-            </td>
             <td>
               <span class="badge bg-<%= case revenda.classificacao
                 when 'diamante' then 'primary'
@@ -28,11 +24,17 @@
                 when 'prata' then 'secondary'
                 when 'bronze' then 'dark'
                 else 'light'
-              end %>" style="font-size: 0.7rem;"><%= revenda.classificacao.humanize %></span>
+              end %>" style="font-size: 0.7rem; min-width: 70px;"><%= revenda.classificacao.humanize %></span>
             </td>
             <td style="font-size: 0.75rem;"><%= revenda.gerente_contas.name %></td>
+            <td style="font-size: 0.75rem;"><%= revenda.tecnicos.active.count %></td>
             <td>
-              <div class="d-flex gap-1">
+              <span class="badge <%= revenda.active? ? 'bg-success' : 'bg-danger' %>" style="font-size: 0.7rem; min-width: 60px;">
+                <%= revenda.active? ? 'Ativa' : 'Inativa' %>
+              </span>
+            </td>
+            <td>
+              <div class="d-flex gap-1 justify-content-center">
                 <%= link_to revenda, class: "btn btn-outline-info btn-sm", style: "width: 30px; height: 26px; font-size: 0.8rem; padding: 2px;",
                     title: "Visualizar dados da revenda", data: { bs_toggle: "tooltip", bs_placement: "top" } do %>
                   <i class="fas fa-eye"></i>
@@ -40,6 +42,14 @@
                 <%= link_to revenda_tecnicos_path(revenda), class: "btn btn-outline-success btn-sm", style: "width: 30px; height: 26px; font-size: 0.8rem; padding: 2px;",
                     title: "Gerenciar técnicos da revenda", data: { bs_toggle: "tooltip", bs_placement: "top" } do %>
                   <i class="fas fa-users"></i>
+                <% end %>
+                <%= link_to "#", class: "btn btn-outline-#{revenda.active? ? 'danger' : 'success'} btn-sm toggle-revenda-btn", style: "width: 30px; height: 26px; font-size: 0.8rem; padding: 2px;",
+                    title: "#{revenda.active? ? 'Desativar' : 'Ativar'} revenda", data: { bs_toggle: "tooltip", bs_placement: "top", revenda_id: revenda.id, action: revenda.active? ? 'desativar' : 'ativar' } do %>
+                  <% if revenda.active? %>
+                    <i class="fas fa-ban"></i>
+                  <% else %>
+                    <i class="fas fa-check"></i>
+                  <% end %>
                 <% end %>
               </div>
             </td>

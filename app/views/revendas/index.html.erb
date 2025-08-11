@@ -4,10 +4,10 @@
   <% end %>
 </div>
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h3 class="text-primary mb-0">
+  <h3 class="text-primary mb-0 text-center w-100">
     <i class="fas fa-store me-2"></i>Gerenciar Revendas
   </h3>
-  <div>
+  <div class="position-absolute" style="right: 0;">
     <%= link_to new_revenda_path, class: "btn btn-outline-primary", 
         title: "Cadastrar nova revenda", data: { bs_toggle: "tooltip", bs_placement: "bottom" } do %>
       <i class="fas fa-plus me-1"></i>Nova
@@ -43,6 +43,30 @@
 <div class="card floating-card">
   <div class="card-body p-3" id="revendas-table">
     <%= render 'table', revendas: @revendas %>
+  </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="confirmModalTitle">Confirmar Ação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3">
+          <i id="confirmIcon" class="fas fa-question-circle fa-3x text-warning"></i>
+        </div>
+        <p id="confirmMessage" class="mb-0 fs-5"></p>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-primary btn-sm" id="confirmButton" style="width: 90px; font-size: 0.75rem; text-align: center; padding: 4px 8px;">Confirmar</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" style="width: 90px; font-size: 0.75rem; text-align: center; padding: 4px 8px;">Cancelar</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -94,6 +118,72 @@ function initFilters() {
     applyFilters();
   });
 }
+
+// Handler para toggle status com modal
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.toggle-revenda-btn')) {
+    e.preventDefault();
+    const btn = e.target.closest('.toggle-revenda-btn');
+    const revendaId = btn.dataset.revendaId;
+    const action = btn.dataset.action;
+    
+    // Configurar modal
+    const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    const confirmButton = document.getElementById('confirmButton');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmIcon = document.getElementById('confirmIcon');
+    
+    // Personalizar modal baseado na ação
+    if (action === 'desativar') {
+      confirmMessage.textContent = 'Tem certeza que deseja desativar esta revenda?';
+      confirmIcon.className = 'fas fa-exclamation-triangle fa-3x text-warning';
+      confirmButton.className = 'btn btn-primary';
+      confirmButton.textContent = 'Confirmar';
+    } else {
+      confirmMessage.textContent = 'Tem certeza que deseja ativar esta revenda?';
+      confirmIcon.className = 'fas fa-check-circle fa-3x text-success';
+      confirmButton.className = 'btn btn-primary';
+      confirmButton.textContent = 'Confirmar';
+    }
+    
+    // Remover listeners anteriores e adicionar novo
+    const newConfirmButton = confirmButton.cloneNode(true);
+    confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
+    
+    newConfirmButton.addEventListener('click', function() {
+      // Fazer requisição
+      fetch(`/revendas/${revendaId}/toggle_status`, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        modal.hide();
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Erro na requisição');
+        }
+      })
+      .then(data => {
+        if (data.success) {
+          location.reload();
+        } else {
+          alert('Erro ao alterar status da revenda');
+        }
+      })
+      .catch(error => {
+        modal.hide();
+        console.error('Erro:', error);
+        alert('Erro ao alterar status da revenda');
+      });
+    });
+    
+    modal.show();
+  }
+});
 
 document.addEventListener('DOMContentLoaded', initFilters);
 document.addEventListener('turbo:load', initFilters);

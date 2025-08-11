@@ -1,5 +1,5 @@
 class RevendasController < ApplicationController
-  before_action :set_revenda, only: [:show, :edit, :update, :destroy]
+  before_action :set_revenda, only: [:show, :edit, :update, :destroy, :toggle_status]
   
   def index
     @revendas = filter_revendas
@@ -42,6 +42,18 @@ class RevendasController < ApplicationController
     redirect_to revendas_path, notice: 'Revenda inativada com sucesso.'
   end
 
+  def toggle_status
+    new_status = !@revenda.active
+    @revenda.update_column(:active, new_status)
+    
+    message = new_status ? 'Revenda ativada com sucesso.' : 'Revenda desativada com sucesso.'
+    
+    respond_to do |format|
+      format.html { redirect_to revendas_path, notice: message }
+      format.json { render json: { success: true, message: message } }
+    end
+  end
+
   private
 
   def set_revenda
@@ -49,7 +61,7 @@ class RevendasController < ApplicationController
   end
 
   def filter_revendas
-    revendas = Revenda.includes(:gerente_contas)
+    revendas = Revenda.includes(:gerente_contas, :tecnicos)
     
     # Filtro por status
     case params[:status]
