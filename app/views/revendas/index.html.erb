@@ -15,6 +15,31 @@
   </div>
 </div>
 
+<!-- Filtros -->
+<div class="card mb-2">
+  <div class="card-body p-2">
+    <div class="row g-2 align-items-center">
+      <div class="col-6">
+        <input type="text" id="search-input" class="form-control form-control-sm" 
+               placeholder="Buscar por nome ou CNPJ..." 
+               value="<%= params[:search] %>" style="font-size: 0.85rem; height: 32px;">
+      </div>
+      <div class="col-3">
+        <select id="status-filter" class="form-select form-select-sm" style="font-size: 0.85rem; height: 32px;">
+          <option value="todas" <%= 'selected' if params[:status].blank? || params[:status] == 'todas' %>>Todas</option>
+          <option value="ativas" <%= 'selected' if params[:status] == 'ativas' %>>Ativas</option>
+          <option value="inativas" <%= 'selected' if params[:status] == 'inativas' %>>Inativas</option>
+        </select>
+      </div>
+      <div class="col-3">
+        <button type="button" id="clear-filters" class="btn btn-outline-secondary btn-sm w-100" style="font-size: 0.85rem; height: 32px;">
+          <i class="fas fa-times"></i> Limpar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="card floating-card">
   <div class="card-body p-3">
     <% if @revendas.any? %>
@@ -24,6 +49,7 @@
             <tr style="font-size: 0.85rem;">
               <th>CNPJ</th>
               <th>Nome Fantasia</th>
+              <th>Status</th>
               <th>Classificação</th>
               <th>Gerente</th>
               <th>Ações</th>
@@ -34,6 +60,11 @@
               <tr style="font-size: 0.8rem;">
                 <td><%= revenda.cnpj_formatted %></td>
                 <td><%= revenda.nome_fantasia %></td>
+                <td>
+                  <span class="badge <%= revenda.active? ? 'bg-success' : 'bg-danger' %>" style="font-size: 0.7rem;">
+                    <%= revenda.active? ? 'Ativa' : 'Inativa' %>
+                  </span>
+                </td>
                 <td>
                   <span class="badge bg-<%= case revenda.classificacao
                     when 'diamante' then 'primary'
@@ -63,8 +94,81 @@
       </div>
     <% else %>
       <div class="text-center text-muted py-3">
-        <p class="mb-0">Nenhuma revenda cadastrada.</p>
+        <p class="mb-0">Nenhuma revenda encontrada.</p>
       </div>
     <% end %>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('search-input');
+  const statusFilter = document.getElementById('status-filter');
+  const clearButton = document.getElementById('clear-filters');
+  let searchTimeout;
+
+  function applyFilters() {
+    const search = searchInput.value;
+    const status = statusFilter.value;
+    
+    const params = new URLSearchParams();
+    if (search) params.set('search', search);
+    if (status && status !== 'todas') params.set('status', status);
+    
+    const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.location.href = url;
+  }
+
+  // Filtro automático na busca com debounce
+  searchInput.addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(applyFilters, 500);
+  });
+
+  // Filtro automático no status
+  statusFilter.addEventListener('change', applyFilters);
+
+  // Botão limpar
+  clearButton.addEventListener('click', function() {
+    searchInput.value = '';
+    statusFilter.value = 'todas';
+    window.location.href = window.location.pathname;
+  });
+});
+
+// Para compatibilidade com Turbo
+document.addEventListener('turbo:load', function() {
+  const searchInput = document.getElementById('search-input');
+  const statusFilter = document.getElementById('status-filter');
+  const clearButton = document.getElementById('clear-filters');
+  
+  if (!searchInput) return;
+  
+  let searchTimeout;
+
+  function applyFilters() {
+    const search = searchInput.value;
+    const status = statusFilter.value;
+    
+    const params = new URLSearchParams();
+    if (search) params.set('search', search);
+    if (status && status !== 'todas') params.set('status', status);
+    
+    const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.location.href = url;
+  }
+
+  searchInput.addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(applyFilters, 500);
+  });
+
+  statusFilter.addEventListener('change', applyFilters);
+
+  clearButton.addEventListener('click', function() {
+    searchInput.value = '';
+    statusFilter.value = 'todas';
+    window.location.href = window.location.pathname;
+  });
+});
+</script>

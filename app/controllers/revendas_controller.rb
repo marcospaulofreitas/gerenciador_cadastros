@@ -2,7 +2,7 @@ class RevendasController < ApplicationController
   before_action :set_revenda, only: [:show, :edit, :update, :destroy]
   
   def index
-    @revendas = Revenda.active.includes(:gerente_contas)
+    @revendas = filter_revendas
   end
 
   def show
@@ -42,6 +42,37 @@ class RevendasController < ApplicationController
 
   def set_revenda
     @revenda = Revenda.find(params[:id])
+  end
+
+  def filter_revendas
+    revendas = Revenda.includes(:gerente_contas)
+    
+    # Filtro por status
+    case params[:status]
+    when 'ativas'
+      revendas = revendas.where(active: true)
+    when 'inativas'
+      revendas = revendas.where(active: false)
+    else
+      revendas = revendas # todas
+    end
+    
+    # Filtro por busca (nome ou CNPJ)
+    if params[:search].present?
+      search_term = params[:search].strip
+      
+      revendas = revendas.where(
+        "LOWER(nome_fantasia) LIKE ? OR REPLACE(REPLACE(REPLACE(cnpj, '.', ''), '/', ''), '-', '') LIKE ?",
+        "%#{search_term.downcase}%", "%#{search_term.gsub(/\D/, '')}%"
+      )
+    end
+    
+    revendas.order(:nome_fantasia)
+  end
+
+  def normalize_string(str)
+    str.tr('ÀÁÂÃÄÅàáâãäåĀāĂăĄąÇçĆćĈĉĊċČčÐðĎďĐđÈÉÊËèéêëĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħÌÍÎÏìíîïĨĩĪīĬĭĮįİıĴĵĶķĸĹĺĻļĽľĿŀŁłÑñŃńŅņŇňŉŊŋÒÓÔÕÖØòóôõöøŌōŎŏŐőŔŕŖŗŘřŚśŜŝŞşŠšſŢţŤťŦŧÙÚÛÜùúûüŨũŪūŬŭŮůŰűŲųŴŵÝýÿŶŷŸŹźŻżŽž',
+           'AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDdEEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIIIiiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnNnNnnNnOOOOOOooooooOoOoOoRrRrRrSsSsSsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwYyyYyYZzZzZz')
   end
 
   def revenda_params
