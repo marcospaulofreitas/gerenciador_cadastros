@@ -3,6 +3,10 @@ class RevendasController < ApplicationController
   
   def index
     @revendas = filter_revendas
+    
+    if request.xhr?
+      render partial: 'table', locals: { revendas: @revendas }, layout: false
+    end
   end
 
   def show
@@ -61,10 +65,17 @@ class RevendasController < ApplicationController
     if params[:search].present?
       search_term = params[:search].strip
       
-      revendas = revendas.where(
-        "LOWER(nome_fantasia) LIKE ? OR REPLACE(REPLACE(REPLACE(cnpj, '.', ''), '/', ''), '-', '') LIKE ?",
-        "%#{search_term.downcase}%", "%#{search_term.gsub(/\D/, '')}%"
-      )
+      # Busca por nome fantasia (case insensitive)
+      nome_condition = "LOWER(nome_fantasia) LIKE LOWER(?)"
+      
+      # Busca por CNPJ (remove formatação)
+      cnpj_numbers = search_term.gsub(/\D/, '')
+      if cnpj_numbers.present?
+        cnpj_condition = "REPLACE(REPLACE(REPLACE(cnpj, '.', ''), '/', ''), '-', '') LIKE ?"
+        revendas = revendas.where("#{nome_condition} OR #{cnpj_condition}", "%#{search_term}%", "%#{cnpj_numbers}%")
+      else
+        revendas = revendas.where(nome_condition, "%#{search_term}%")
+      end
     end
     
     revendas.order(:nome_fantasia)

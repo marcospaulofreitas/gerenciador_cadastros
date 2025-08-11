@@ -1,0 +1,55 @@
+<% if revendas.any? %>
+  <div class="table-responsive">
+    <table class="table table-sm table-hover mb-0">
+      <thead>
+        <tr style="font-size: 0.85rem;">
+          <th>CNPJ</th>
+          <th>Nome Fantasia</th>
+          <th>Status</th>
+          <th>Classificação</th>
+          <th>Gerente</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% revendas.each do |revenda| %>
+          <tr style="font-size: 0.8rem;">
+            <td><%= revenda.cnpj_formatted %></td>
+            <td><%= revenda.nome_fantasia %></td>
+            <td>
+              <span class="badge <%= revenda.active? ? 'bg-success' : 'bg-danger' %>" style="font-size: 0.7rem;">
+                <%= revenda.active? ? 'Ativa' : 'Inativa' %>
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-<%= case revenda.classificacao
+                when 'diamante' then 'primary'
+                when 'ouro' then 'warning'
+                when 'prata' then 'secondary'
+                when 'bronze' then 'dark'
+                else 'light'
+              end %>" style="font-size: 0.7rem;"><%= revenda.classificacao.humanize %></span>
+            </td>
+            <td style="font-size: 0.75rem;"><%= revenda.gerente_contas.name %></td>
+            <td>
+              <div class="d-flex gap-1">
+                <%= link_to revenda, class: "btn btn-outline-info btn-sm", style: "width: 30px; height: 26px; font-size: 0.8rem; padding: 2px;",
+                    title: "Visualizar dados da revenda", data: { bs_toggle: "tooltip", bs_placement: "top" } do %>
+                  <i class="fas fa-eye"></i>
+                <% end %>
+                <%= link_to revenda_tecnicos_path(revenda), class: "btn btn-outline-success btn-sm", style: "width: 30px; height: 26px; font-size: 0.8rem; padding: 2px;",
+                    title: "Gerenciar técnicos da revenda", data: { bs_toggle: "tooltip", bs_placement: "top" } do %>
+                  <i class="fas fa-users"></i>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="text-center text-muted py-3">
+    <p class="mb-0">Nenhuma revenda encontrada.</p>
+  </div>
+<% end %>
