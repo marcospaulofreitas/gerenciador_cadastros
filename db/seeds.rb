@@ -27,6 +27,6 @@ if admin_profile
     user.user_profile = admin_profile
     user.active = true
   end
-  
+
   puts "Usuário administrador criado: #{admin_user.email}"
 end

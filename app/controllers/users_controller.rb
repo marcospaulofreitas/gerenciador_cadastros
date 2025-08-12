@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:edit, :update, :destroy]
+  before_action :set_user, only: [ :edit, :update, :destroy ]
 
   def index
     @users = User.includes(:user_profile, :revenda).active.order(:name)
@@ -13,9 +13,9 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    
+
     if @user.save
-      redirect_to users_path, notice: 'Usuário criado com sucesso.'
+      redirect_to users_path, notice: "Usuário criado com sucesso."
     else
       @user_profiles = UserProfile.active
       @revendas = Revenda.active.order(:nome_fantasia)
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to users_path, notice: 'Usuário atualizado com sucesso.'
+      redirect_to users_path, notice: "Usuário atualizado com sucesso."
     else
       @user_profiles = UserProfile.active
       @revendas = Revenda.active.order(:nome_fantasia)
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user.update(active: false)
-    redirect_to users_path, notice: 'Usuário desativado com sucesso.'
+    redirect_to users_path, notice: "Usuário desativado com sucesso."
   end
 
   private
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     # Verificar se usuário tem permissão para acessar este registro
     unless current_user.webposto_admin? || (@user == current_user)
-      redirect_to users_path, alert: 'Acesso negado.'
+      redirect_to users_path, alert: "Acesso negado."
     end
   end
 

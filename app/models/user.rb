@@ -1,13 +1,13 @@
 class User < ApplicationRecord
   include Auditable
-  
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :timeoutable
-         
+
   def self.find_for_authentication(warden_conditions)
     conditions = warden_conditions.dup
     if (login = conditions.delete(:login))
-      where(conditions.to_h).where(["lower(email) = :value OR lower(login) = :value", { :value => login.downcase }]).first
+      where(conditions.to_h).where([ "lower(email) = :value OR lower(login) = :value", { value: login.downcase } ]).first
     else
       where(conditions.to_h).first
     end
@@ -16,7 +16,7 @@ class User < ApplicationRecord
 
   belongs_to :user_profile
   belongs_to :revenda, optional: true
-  has_many :managed_revendas, class_name: 'Revenda', foreign_key: 'gerente_contas_id', dependent: :nullify
+  has_many :managed_revendas, class_name: "Revenda", foreign_key: "gerente_contas_id", dependent: :nullify
 
   validates :name, presence: true
   validates :login, presence: true, uniqueness: true
@@ -24,28 +24,28 @@ class User < ApplicationRecord
   validate :gerente_contas_must_have_revenda
 
   scope :active, -> { where(active: true) }
-  scope :administradores, -> { joins(:user_profile).where(user_profiles: { name: 'administrador' }) }
-  scope :gerentes_contas, -> { joins(:user_profile).where(user_profiles: { name: 'gerente_contas' }) }
-  scope :basicos, -> { joins(:user_profile).where(user_profiles: { name: 'basico' }) }
+  scope :administradores, -> { joins(:user_profile).where(user_profiles: { name: "administrador" }) }
+  scope :gerentes_contas, -> { joins(:user_profile).where(user_profiles: { name: "gerente_contas" }) }
+  scope :basicos, -> { joins(:user_profile).where(user_profiles: { name: "basico" }) }
 
   def webposto_admin?
-    user_profile&.name == 'administrador'
+    user_profile&.name == "administrador"
   end
 
   def webposto_gerente?
-    user_profile&.name == 'gerente_contas'
+    user_profile&.name == "gerente_contas"
   end
 
   def webposto_basico?
-    user_profile&.name == 'basico'
+    user_profile&.name == "basico"
   end
 
   def revenda_admin?
-    user_profile&.name == 'revenda_admin'
+    user_profile&.name == "revenda_admin"
   end
 
   def revenda_tecnico?
-    user_profile&.name == 'revenda_tecnico'
+    user_profile&.name == "revenda_tecnico"
   end
 
   def full_access?
@@ -55,7 +55,7 @@ class User < ApplicationRecord
   def can_manage_revenda?(revenda)
     return true if webposto_admin?
     return false unless webposto_gerente?
-    
+
     managed_revendas.include?(revenda)
   end
 
@@ -63,7 +63,7 @@ class User < ApplicationRecord
 
   def gerente_contas_must_have_revenda
     return unless webposto_gerente? && revenda.blank?
-    
-    errors.add(:revenda, 'deve ser selecionada para Gerente de Contas')
+
+    errors.add(:revenda, "deve ser selecionada para Gerente de Contas")
   end
 end

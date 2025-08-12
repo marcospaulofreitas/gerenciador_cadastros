@@ -11,28 +11,28 @@ module Auditable
   private
 
   def audit_create
-    create_audit_record('create')
+    create_audit_record("create")
   end
 
   def audit_update
     return unless saved_changes.any?
-    filtered_changes = saved_changes.except('updated_at', 'encrypted_password', 'remember_created_at')
+    filtered_changes = saved_changes.except("updated_at", "encrypted_password", "remember_created_at")
     return if filtered_changes.empty?
-    
-    create_audit_record('update', filtered_changes)
+
+    create_audit_record("update", filtered_changes)
   end
 
   def audit_destroy
-    create_audit_record('destroy')
+    create_audit_record("destroy")
   end
 
   def create_audit_record(action, changes = {})
     current_user = get_current_user
     current_tecnico = get_current_tecnico
-    
+
     # Alterações de técnicos ficam pendentes, de usuários webposto são aprovadas
     aprovado = current_tecnico.nil?
-    
+
     audits.create!(
       user: current_user,
       tecnico: current_tecnico,
@@ -73,7 +73,7 @@ module Auditable
     elsif tecnico
       tecnico.name
     else
-      'Sistema'
+      "Sistema"
     end
   end
 end

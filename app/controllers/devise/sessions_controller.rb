@@ -1,9 +1,9 @@
 class Devise::SessionsController < DeviseController
-  prepend_before_action :require_no_authentication, only: [:new, :create]
+  prepend_before_action :require_no_authentication, only: [ :new, :create ]
   prepend_before_action :allow_params_authentication!, only: :create
-  before_action :redirect_if_authenticated, only: [:new]
+  before_action :redirect_if_authenticated, only: [ :new ]
 
-  prepend_before_action(only: [:create, :destroy]) { request.env["devise.skip_timeout"] = true }
+  prepend_before_action(only: [ :create, :destroy ]) { request.env["devise.skip_timeout"] = true }
 
   def new
     self.resource = resource_class.new
@@ -14,32 +14,32 @@ class Devise::SessionsController < DeviseController
 
   def create
     access_type = params[:access_type]
-    
-    if access_type == 'webposto'
+
+    if access_type == "webposto"
       # webPosto usa tabela User
       params[:user][:login] = params[:user][:email]
-      
+
       begin
         self.resource = warden.authenticate!(auth_options)
-        session[:access_type] = 'webposto'
+        session[:access_type] = "webposto"
         session[:revenda_id] = nil
         set_flash_message!(:notice, :signed_in)
         sign_in(resource_name, resource)
         redirect_to webposto_dashboard_path
         return
       rescue Warden::NotAuthenticated
-        flash.now[:alert] = 'E-mail ou senha inválidos'
+        flash.now[:alert] = "E-mail ou senha inválidos"
         self.resource = resource_class.new(sign_in_params)
         render :new
         return
       end
-      
-    elsif access_type == 'revenda'
+
+    elsif access_type == "revenda"
       # Revenda usa controller específico - redirecionar
       redirect_to revenda_login_path
       return
     end
-    
+
     set_flash_message!(:notice, :signed_in)
     sign_in(resource_name, resource)
     redirect_to root_path
@@ -48,7 +48,7 @@ class Devise::SessionsController < DeviseController
   def destroy
     signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
     session.clear
-    flash[:notice] = 'Logout efetuado com sucesso!'
+    flash[:notice] = "Logout efetuado com sucesso!"
     yield if block_given?
     redirect_to root_path
   end
@@ -63,7 +63,7 @@ class Devise::SessionsController < DeviseController
     methods = resource_class.authentication_keys.dup
     methods = methods.keys if methods.is_a?(Hash)
     methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
+    { methods: methods, only: [ :password ] }
   end
 
   def auth_options
@@ -71,17 +71,17 @@ class Devise::SessionsController < DeviseController
   end
 
   def translation_scope
-    'devise.sessions'
+    "devise.sessions"
   end
-  
+
   private
-  
+
   def redirect_if_authenticated
-    if user_signed_in? && session[:access_type] == 'webposto'
-      flash[:info] = 'Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro.'
+    if user_signed_in? && session[:access_type] == "webposto"
+      flash[:info] = "Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro."
       redirect_to webposto_dashboard_path
-    elsif defined?(tecnico_signed_in?) && tecnico_signed_in? && session[:access_type] == 'revenda'
-      flash[:info] = 'Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro.'
+    elsif defined?(tecnico_signed_in?) && tecnico_signed_in? && session[:access_type] == "revenda"
+      flash[:info] = "Você já está logado no sistema. Para acessar a tela inicial, faça logout primeiro."
       redirect_to revenda_dashboard_path
     end
   end

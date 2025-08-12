@@ -1,19 +1,15 @@
-```ruby
-# app/controllers/revendas_controller.rb
-
-class RevendasController < ApplicationController
-  # ...existing code...
-
+class RevendaSessionsController < ApplicationController
   def create
-    revenda = Revenda.find_by(cnpj: params[:cnpj])
-    if revenda && revenda.authenticate(params[:password])
-      # ...login logic...
+    cnpj = sanitize_cnpj(params[:cnpj])
+    revenda = Revenda.find_by(cnpj: cnpj)
+
+    if revenda&.active?
+      session[:access_type] = "revenda"
+      session[:revenda_id] = revenda.id
+      redirect_to revenda_dashboard_path
     else
-      flash[:alert] = "CNPJ ou senha inválidos."
-      render :new
+      flash[:alert] = "CNPJ não encontrado ou revenda inativa."
+      redirect_to root_path
     end
   end
-
-  # ...existing code...
 end
-```

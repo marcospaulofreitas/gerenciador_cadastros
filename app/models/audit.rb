@@ -28,7 +28,7 @@ class Audit < ApplicationRecord
 
   def changes_summary
     return "Nenhuma alteração" if field_changes.blank?
-    
+
     begin
       changes = JSON.parse(field_changes)
       changes.map do |field, values|
@@ -41,21 +41,21 @@ class Audit < ApplicationRecord
 
   def action_description
     case action
-    when 'create' then 'Criação'
-    when 'update' then 'Atualização'
-    when 'destroy' then 'Inativação'
+    when "create" then "Criação"
+    when "update" then "Atualização"
+    when "destroy" then "Inativação"
     else action.humanize
     end
   end
-  
+
   def pendente?
     !aprovado?
   end
-  
+
   def aprovar!
     update!(aprovado: true)
   end
-  
+
   def feito_por_tecnico?
     tecnico_id.present?
   end
