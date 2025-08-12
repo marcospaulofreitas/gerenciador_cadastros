@@ -21,7 +21,6 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :login, presence: true, uniqueness: true
   validates :user_profile_id, presence: true
-  validate :gerente_contas_must_have_revenda
 
   scope :active, -> { where(active: true) }
   scope :administradores, -> { joins(:user_profile).where(user_profiles: { name: "administrador" }) }
@@ -60,10 +59,4 @@ class User < ApplicationRecord
   end
 
   private
-
-  def gerente_contas_must_have_revenda
-    return unless webposto_gerente? && revenda.blank?
-
-    errors.add(:revenda, "deve ser selecionada para Gerente de Contas")
-  end
 end
