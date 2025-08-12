@@ -1,0 +1,100 @@
+<div class="mb-2">
+  <%= link_to webposto_dashboard_path, class: "btn btn-outline-secondary btn-sm" do %>
+    <i class="fas fa-arrow-left me-1"></i>Voltar
+  <% end %>
+</div>
+
+<div class="mb-4">
+  <h2 class="text-secondary mb-0">
+    <i class="fas fa-chart-bar me-2"></i>Relatórios do Sistema
+  </h2>
+</div>
+
+<!-- Estatísticas Gerais -->
+<div class="row g-4 mb-4">
+  <div class="col-md-3">
+    <div class="card floating-card text-center">
+      <div class="card-body">
+        <i class="fas fa-store fa-2x text-primary mb-2"></i>
+        <h4 class="text-primary"><%= @revendas_count %></h4>
+        <p class="mb-0">Revendas</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card floating-card text-center">
+      <div class="card-body">
+        <i class="fas fa-tools fa-2x text-success mb-2"></i>
+        <h4 class="text-success"><%= @tecnicos_count %></h4>
+        <p class="mb-0">Técnicos</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card floating-card text-center">
+      <div class="card-body">
+        <i class="fas fa-users fa-2x text-info mb-2"></i>
+        <h4 class="text-info"><%= @usuarios_count %></h4>
+        <p class="mb-0">Usuários</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card floating-card text-center">
+      <div class="card-body">
+        <i class="fas fa-history fa-2x text-warning mb-2"></i>
+        <h4 class="text-warning"><%= @audits_count %></h4>
+        <p class="mb-0">Auditorias</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Relatórios Disponíveis -->
+<div class="card floating-card">
+  <div class="card-header bg-secondary text-white">
+    <h5 class="mb-0"><i class="fas fa-file-export me-2"></i>Exportar Relatórios</h5>
+  </div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-store fa-3x text-primary mb-3"></i>
+            <h6 class="card-title">Relatório de Revendas</h6>
+            <p class="card-text small text-muted">Lista completa de revendas com dados de contato e gerentes</p>
+            <%= link_to export_revendas_relatorios_path(format: :csv), class: "btn btn-outline-primary btn-sm" do %>
+              <i class="fas fa-download me-1"></i>Exportar CSV
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-tools fa-3x text-success mb-3"></i>
+            <h6 class="card-title">Relatório de Técnicos</h6>
+            <p class="card-text small text-muted">Lista de técnicos por revenda com funções e status</p>
+            <%= link_to export_tecnicos_relatorios_path(format: :csv), class: "btn btn-outline-success btn-sm" do %>
+              <i class="fas fa-download me-1"></i>Exportar CSV
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-users fa-3x text-info mb-3"></i>
+            <h6 class="card-title">Relatório de Usuários</h6>
+            <p class="card-text small text-muted">Lista de usuários do sistema com perfis de acesso</p>
+            <%= link_to export_usuarios_relatorios_path(format: :csv), class: "btn btn-outline-info btn-sm" do %>
+              <i class="fas fa-download me-1"></i>Exportar CSV
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

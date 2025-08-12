@@ -30,6 +30,18 @@ Rails.application.routes.draw do
   end
   resources :users, except: [:show]
   resources :user_profiles, only: [:index]
+  resources :tecnicos_globais, path: 'tecnicos', only: [:index] do
+    member do
+      patch :toggle_status
+    end
+  end
+  resources :relatorios, only: [:index] do
+    collection do
+      get :export_revendas
+      get :export_tecnicos
+      get :export_usuarios
+    end
+  end
   resources :audits, only: [:index] do
     member do
       patch :approve

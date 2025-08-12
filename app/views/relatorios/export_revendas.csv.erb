@@ -1,0 +1,4 @@
+CNPJ,Nome Fantasia,Razão Social,Classificação,Gerente de Contas,Telefone,Email,Status,Técnicos Ativos
+<% @revendas.each do |revenda| -%>
+<%= revenda.cnpj %>,<%= revenda.nome_fantasia %>,<%= revenda.razao_social %>,<%= revenda.classificacao %>,<%= revenda.gerente_contas.name %>,<%= revenda.telefone_suporte %>,<%= revenda.email_suporte %>,<%= revenda.active? ? 'Ativa' : 'Inativa' %>,<%= revenda.tecnicos.active.count %>
+<% end -%>

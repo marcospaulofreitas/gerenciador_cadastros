@@ -6,7 +6,7 @@ class AuditsController < ApplicationController
                    .pendentes
                    .by_tecnicos
                    .recent
-                   .page(params[:page])
+                   .limit(50)
   end
   
   def approve

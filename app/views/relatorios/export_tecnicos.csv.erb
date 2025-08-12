@@ -1,0 +1,4 @@
+Nome,Email,Telefone,Revenda,Função,Perfil,Especialista,Status
+<% @tecnicos.each do |tecnico| -%>
+<%= tecnico.name %>,<%= tecnico.email %>,<%= tecnico.telefone %>,<%= tecnico.revenda.nome_fantasia %>,<%= tecnico.funcao %>,<%= tecnico.perfil_acesso %>,<%= tecnico.especialista? ? 'Sim' : 'Não' %>,<%= tecnico.active? ? 'Ativo' : 'Inativo' %>
+<% end -%>

@@ -1,0 +1,200 @@
+<div class="mb-2">
+  <%= link_to webposto_dashboard_path, class: "btn btn-outline-secondary btn-sm" do %>
+    <i class="fas fa-arrow-left me-1"></i>Voltar
+  <% end %>
+</div>
+
+<div class="mb-3">
+  <div class="d-flex justify-content-between align-items-start">
+    <h2 class="text-success mb-0">
+      <i class="fas fa-tools me-2"></i>Gerenciar Técnicos
+    </h2>
+  </div>
+</div>
+
+<!-- Filtros -->
+<div class="card floating-card mb-4">
+  <div class="card-body p-3">
+    <div class="row g-2 align-items-center">
+      <div class="col-4">
+        <input type="text" id="search-input" class="form-control form-control-sm" 
+               placeholder="Buscar por nome ou email..." 
+               value="<%= params[:search] %>" style="font-size: 0.85rem; height: 32px;">
+      </div>
+      <div class="col-2">
+        <select id="status-filter" class="form-select form-select-sm" style="font-size: 0.85rem; height: 32px;">
+          <option value="todos" <%= 'selected' if params[:status].blank? || params[:status] == 'todos' %>>Todos</option>
+          <option value="ativos" <%= 'selected' if params[:status] == 'ativos' %>>Ativos</option>
+          <option value="inativos" <%= 'selected' if params[:status] == 'inativos' %>>Inativos</option>
+        </select>
+      </div>
+      <div class="col-4">
+        <select id="revenda-filter" class="form-select form-select-sm" style="font-size: 0.85rem; height: 32px;">
+          <option value="" <%= 'selected' if params[:revenda].blank? %>>Todas as Revendas</option>
+          <% @revendas.each do |revenda| %>
+            <option value="<%= revenda.id %>" <%= 'selected' if params[:revenda] == revenda.id.to_s %>><%= revenda.nome_fantasia %></option>
+          <% end %>
+        </select>
+      </div>
+      <div class="col-2">
+        <button type="button" id="clear-filters" class="btn btn-outline-secondary btn-sm w-100" style="font-size: 0.8rem; height: 32px;">
+          <i class="fas fa-times"></i> Limpar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card floating-card">
+  <div class="card-body p-3" id="tecnicos-table">
+    <%= render 'table', tecnicos: @tecnicos %>
+  </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="confirmModalTitle">Confirmar Ação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3">
+          <i id="confirmIcon" class="fas fa-question-circle fa-3x text-warning"></i>
+        </div>
+        <p id="confirmMessage" class="mb-0 fs-5"></p>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-primary btn-sm" id="confirmButton" style="width: 90px; font-size: 0.75rem; text-align: center; padding: 4px 8px;">Confirmar</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" style="width: 90px; font-size: 0.75rem; text-align: center; padding: 4px 8px;">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function initFilters() {
+  const searchInput = document.getElementById('search-input');
+  const statusFilter = document.getElementById('status-filter');
+  const revendaFilter = document.getElementById('revenda-filter');
+  const clearButton = document.getElementById('clear-filters');
+  
+  if (!searchInput) return;
+  
+  let searchTimeout;
+
+  function applyFilters() {
+    const search = searchInput.value;
+    const status = statusFilter.value;
+    const revenda = revendaFilter.value;
+    const tableContainer = document.getElementById('tecnicos-table');
+    
+    const params = new URLSearchParams();
+    if (search) params.set('search', search);
+    if (status && status !== 'todos') params.set('status', status);
+    if (revenda) params.set('revenda', revenda);
+    
+    fetch(window.location.pathname + '?' + params.toString(), {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'text/html'
+      }
+    })
+    .then(response => response.text())
+    .then(html => {
+      tableContainer.innerHTML = html;
+    })
+    .catch(error => {
+      console.error('Erro ao filtrar:', error);
+    });
+  }
+
+  searchInput.addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(applyFilters, 500);
+  });
+
+  statusFilter.addEventListener('change', applyFilters);
+  revendaFilter.addEventListener('change', applyFilters);
+
+  clearButton.addEventListener('click', function() {
+    searchInput.value = '';
+    statusFilter.value = 'todos';
+    revendaFilter.value = '';
+    applyFilters();
+  });
+}
+
+// Handler para toggle status com modal
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.toggle-tecnico-btn')) {
+    e.preventDefault();
+    const btn = e.target.closest('.toggle-tecnico-btn');
+    const tecnicoId = btn.dataset.tecnicoId;
+    const action = btn.dataset.action;
+    
+    // Configurar modal
+    const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    const confirmButton = document.getElementById('confirmButton');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmIcon = document.getElementById('confirmIcon');
+    
+    // Personalizar modal baseado na ação
+    if (action === 'desativar') {
+      confirmMessage.textContent = 'Tem certeza que deseja desativar este técnico?';
+      confirmIcon.className = 'fas fa-exclamation-triangle fa-3x text-warning';
+      confirmButton.className = 'btn btn-primary btn-sm';
+      confirmButton.textContent = 'Confirmar';
+    } else {
+      confirmMessage.textContent = 'Tem certeza que deseja ativar este técnico?';
+      confirmIcon.className = 'fas fa-check-circle fa-3x text-success';
+      confirmButton.className = 'btn btn-primary btn-sm';
+      confirmButton.textContent = 'Confirmar';
+    }
+    
+    // Remover listeners anteriores e adicionar novo
+    const newConfirmButton = confirmButton.cloneNode(true);
+    confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
+    
+    newConfirmButton.addEventListener('click', function() {
+      // Fazer requisição
+      fetch(`/tecnicos/${tecnicoId}/toggle_status`, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        modal.hide();
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Erro na requisição');
+        }
+      })
+      .then(data => {
+        if (data.success) {
+          location.reload();
+        } else {
+          alert('Erro ao alterar status do técnico');
+        }
+      })
+      .catch(error => {
+        modal.hide();
+        console.error('Erro:', error);
+        alert('Erro ao alterar status do técnico');
+      });
+    });
+    
+    modal.show();
+  }
+});
+
+document.addEventListener('DOMContentLoaded', initFilters);
+document.addEventListener('turbo:load', initFilters);
+</script>

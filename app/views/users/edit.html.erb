@@ -1,0 +1,74 @@
+<div class="mb-2">
+  <%= link_to users_path, class: "btn btn-outline-secondary btn-sm" do %>
+    <i class="fas fa-arrow-left me-1"></i>Voltar
+  <% end %>
+</div>
+
+<div class="mb-4">
+  <h2 class="text-info mb-0">
+    <i class="fas fa-user-edit me-2"></i>Editar Usuário
+  </h2>
+</div>
+
+<div class="card floating-card">
+  <div class="card-body">
+    <%= form_with model: @user, local: true, class: "row g-3" do |f| %>
+      <% if @user.errors.any? %>
+        <div class="col-12">
+          <div class="alert alert-danger">
+            <h6>Erro ao salvar usuário:</h6>
+            <ul class="mb-0">
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="col-md-6">
+        <%= f.label :name, "Nome", class: "form-label" %>
+        <%= f.text_field :name, class: "form-control", required: true %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.label :email, "Email", class: "form-label" %>
+        <%= f.email_field :email, class: "form-control", required: true %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.label :login, "Login", class: "form-label" %>
+        <%= f.text_field :login, class: "form-control", required: true %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.label :user_profile_id, "Perfil", class: "form-label" %>
+        <%= f.select :user_profile_id, options_from_collection_for_select(@user_profiles, :id, :name, @user.user_profile_id), 
+            { prompt: "Selecione um perfil" }, { class: "form-select", required: true } %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.label :password, "Nova Senha (deixe em branco para manter atual)", class: "form-label" %>
+        <%= f.password_field :password, class: "form-control" %>
+      </div>
+
+      <div class="col-md-6">
+        <%= f.label :password_confirmation, "Confirmar Nova Senha", class: "form-label" %>
+        <%= f.password_field :password_confirmation, class: "form-control" %>
+      </div>
+
+      <div class="col-12">
+        <%= f.label :revenda_id, "Revenda (opcional - apenas para Gerentes de Contas)", class: "form-label" %>
+        <%= f.select :revenda_id, options_from_collection_for_select(@revendas, :id, :nome_fantasia, @user.revenda_id), 
+            { prompt: "Selecione uma revenda" }, { class: "form-select" } %>
+      </div>
+
+      <div class="col-12">
+        <div class="d-flex gap-2">
+          <%= f.submit "Atualizar Usuário", class: "btn btn-info" %>
+          <%= link_to "Cancelar", users_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

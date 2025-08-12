@@ -1,0 +1,4 @@
+Nome,Email,Login,Perfil,Revenda,Status
+<% @usuarios.each do |usuario| -%>
+<%= usuario.name %>,<%= usuario.email %>,<%= usuario.login %>,<%= usuario.user_profile.name %>,<%= usuario.revenda&.nome_fantasia || 'N/A' %>,<%= usuario.active? ? 'Ativo' : 'Inativo' %>
+<% end -%>
