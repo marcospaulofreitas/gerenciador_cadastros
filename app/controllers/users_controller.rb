@@ -47,6 +47,10 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+    # Verificar se usuário tem permissão para acessar este registro
+    unless current_user.webposto_admin? || (@user == current_user)
+      redirect_to users_path, alert: 'Acesso negado.'
+    end
   end
 
   def user_params

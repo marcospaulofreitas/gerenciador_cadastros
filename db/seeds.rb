@@ -22,8 +22,8 @@ if admin_profile
   admin_user = User.find_or_create_by!(email: 'admin@gerenciador.com') do |user|
     user.name = 'Administrador'
     user.login = 'admin'
-    user.password = '123456'
-    user.password_confirmation = '123456'
+    user.password = ENV.fetch('ADMIN_PASSWORD', 'change_me_in_production')
+    user.password_confirmation = ENV.fetch('ADMIN_PASSWORD', 'change_me_in_production')
     user.user_profile = admin_profile
     user.active = true
   end

@@ -44,10 +44,9 @@ class Revenda < ApplicationRecord
   def cnpj_must_be_valid
     return if cnpj.blank?
     
-    # Validação básica de formato CNPJ
-    cnpj_numbers = cnpj.gsub(/\D/, '')
-    unless cnpj_numbers.length == 14
-      errors.add(:cnpj, 'deve ter 14 dígitos')
+    # Usar gem cpf_cnpj para validação completa
+    unless CNPJ.valid?(cnpj)
+      errors.add(:cnpj, 'não é válido')
     end
   end
   

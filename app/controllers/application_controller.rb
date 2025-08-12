@@ -39,12 +39,20 @@ class ApplicationController < ActionController::Base
   end
 
   def current_revenda
-    @current_revenda ||= Revenda.find(session[:revenda_id]) if session[:revenda_id]
+    return nil unless session[:revenda_id]
+    @current_revenda ||= Revenda.find(session[:revenda_id])
+  rescue ActiveRecord::RecordNotFound
+    session[:revenda_id] = nil
+    nil
   end
   helper_method :current_revenda
   
   def current_tecnico
-    @current_tecnico ||= Tecnico.find(session[:tecnico_id]) if session[:tecnico_id]
+    return nil unless session[:tecnico_id]
+    @current_tecnico ||= Tecnico.find(session[:tecnico_id])
+  rescue ActiveRecord::RecordNotFound
+    session[:tecnico_id] = nil
+    nil
   end
   helper_method :current_tecnico
 

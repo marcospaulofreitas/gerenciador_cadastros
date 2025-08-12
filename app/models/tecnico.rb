@@ -4,7 +4,7 @@ class Tecnico < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :timeoutable
          
-  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true, allow_blank: true
          
   FUNCOES = %w[supervisor rh suporte desenvolvedor analista plantao dba comercial financeiro outros].freeze
   PERFIS_ACESSO = %w[administrador tecnico].freeze

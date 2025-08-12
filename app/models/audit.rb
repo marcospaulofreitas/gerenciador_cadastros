@@ -18,9 +18,9 @@ class Audit < ApplicationRecord
 
   def performer_name
     if user
-      "#{user.name} (#{user.user_profile.name})"
+      "#{user.name} (#{user.user_profile&.name || 'Sem perfil'})"
     elsif tecnico
-      "#{tecnico.name} (#{tecnico.perfil_acesso} - #{tecnico.revenda.nome_fantasia})"
+      "#{tecnico.name} (#{tecnico.perfil_acesso} - #{tecnico.revenda&.nome_fantasia || 'Sem revenda'})"
     else
       performed_by
     end

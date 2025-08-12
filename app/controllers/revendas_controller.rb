@@ -90,7 +90,7 @@ class RevendasController < ApplicationController
       cnpj_numbers = search_term.gsub(/\D/, '')
       if cnpj_numbers.present?
         cnpj_condition = "REPLACE(REPLACE(REPLACE(cnpj, '.', ''), '/', ''), '-', '') LIKE ?"
-        revendas = revendas.where("#{nome_condition} OR #{cnpj_condition}", "%#{search_term}%", "%#{cnpj_numbers}%")
+        revendas = revendas.where("(#{nome_condition}) OR (#{cnpj_condition})", "%#{search_term}%", "%#{cnpj_numbers}%")
       else
         revendas = revendas.where(nome_condition, "%#{search_term}%")
       end
