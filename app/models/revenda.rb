@@ -2,7 +2,6 @@ class Revenda < ApplicationRecord
   include Auditable
 
   CLASSIFICACOES = %w[diamante ouro prata bronze branca].freeze
-  TIPOS_CONTATO = %w[celular fixo 0800].freeze
 
   belongs_to :gerente_contas, class_name: "User", foreign_key: "gerente_contas_id"
   has_many :tecnicos, dependent: :destroy
@@ -11,7 +10,6 @@ class Revenda < ApplicationRecord
   validates :cnpj, presence: true, uniqueness: true
   validates :razao_social, presence: true
   validates :nome_fantasia, presence: true
-  validates :tipo_contato, inclusion: { in: TIPOS_CONTATO }
   validates :telefone_suporte, presence: true
   validates :email_suporte, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :responsavel, presence: true
@@ -51,21 +49,17 @@ class Revenda < ApplicationRecord
   end
 
   def telefone_format_must_be_valid
-    return if telefone_suporte.blank? || tipo_contato.blank?
+    return if telefone_suporte.blank?
 
-    case tipo_contato
-    when "celular"
-      unless telefone_suporte.match?(/\A\(\d{2}\) \d{5}-\d{4}\z/)
-        errors.add(:telefone_suporte, "deve estar no formato (00) 00000-0000 para celular")
-      end
-    when "fixo"
-      unless telefone_suporte.match?(/\A\(\d{2}\) \d{4}-\d{4}\z/)
-        errors.add(:telefone_suporte, "deve estar no formato (00) 0000-0000 para fixo")
-      end
-    when "0800"
-      unless telefone_suporte.match?(/\A\d{4}-\d{3}-\d{4}\z/)
-        errors.add(:telefone_suporte, "deve estar no formato 0000-000-0000 para 0800")
-      end
+    # Aceita formatos: (00) 00000-0000, (00) 0000-0000, 0000-000-0000
+    valid_formats = [
+      /\A\(\d{2}\) \d{5}-\d{4}\z/, # Celular
+      /\A\(\d{2}\) \d{4}-\d{4}\z/,  # Fixo
+      /\A\d{4}-\d{3}-\d{4}\z/      # 0800
+    ]
+    
+    unless valid_formats.any? { |format| telefone_suporte.match?(format) }
+      errors.add(:telefone_suporte, "deve estar em um formato válido: (00) 00000-0000, (00) 0000-0000 ou 0000-000-0000")
     end
   end
 end

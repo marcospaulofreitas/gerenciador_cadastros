@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_11_000001) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_12_204011) do
   create_table "audits", force: :cascade do |t|
     t.integer "user_id"
     t.integer "tecnico_id"
@@ -37,7 +37,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_11_000001) do
     t.string "cnpj", null: false
     t.string "razao_social", null: false
     t.string "nome_fantasia", null: false
-    t.string "tipo_contato", null: false
     t.string "telefone_suporte", null: false
     t.string "email_suporte", null: false
     t.string "responsavel", null: false

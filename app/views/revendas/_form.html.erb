@@ -1,0 +1,446 @@
+<div class="container-fluid" style="width: 100%; padding: 0;">
+  <%= form_with model: @revenda, local: true, class: "row g-2 g-md-1" do |f| %>
+    <% if @revenda.errors.any? %>
+      <div class="col-12">
+        <div class="alert alert-danger">
+          <h6>Erro ao salvar:</h6>
+          <ul class="mb-0">
+            <% @revenda.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Linha 1: CNPJ e Razão Social -->
+    <div class="col-12 col-md-4">
+      <%= f.label :cnpj, class: "form-label form-label-xs" %>
+      <%= f.text_field :cnpj, class: "form-control form-control-xs", placeholder: "00.000.000/0000-00", id: "cnpj_field" %>
+    </div>
+    <div class="col-12 col-md-8">
+      <%= f.label :razao_social, class: "form-label form-label-xs" %>
+      <%= f.text_field :razao_social, class: "form-control form-control-xs" %>
+    </div>
+
+    <!-- Linha 2: Nome Fantasia e Responsável -->
+    <div class="col-12 col-md-6">
+      <%= f.label :nome_fantasia, class: "form-label form-label-xs" %>
+      <%= f.text_field :nome_fantasia, class: "form-control form-control-xs" %>
+    </div>
+    <div class="col-12 col-md-6">
+      <%= f.label :responsavel, class: "form-label form-label-xs" %>
+      <%= f.text_field :responsavel, class: "form-control form-control-xs" %>
+    </div>
+
+    <!-- Linha 3: Telefone e Email -->
+    <div class="col-12 col-md-4">
+      <%= f.label :telefone_suporte, "Telefone", class: "form-label form-label-xs" %>
+      <%= f.text_field :telefone_suporte, class: "form-control form-control-xs", id: "telefone_field" %>
+    </div>
+    <div class="col-12 col-md-8">
+      <%= f.label :email_suporte, "Email", class: "form-label form-label-xs" %>
+      <%= f.email_field :email_suporte, class: "form-control form-control-xs" %>
+    </div>
+
+    <!-- Linha 4: CEP, Logradouro, Número e Complemento -->
+    <div class="col-6 col-md-2">
+      <%= f.label :cep, class: "form-label form-label-xs" %>
+      <%= f.text_field :cep, class: "form-control form-control-xs", placeholder: "00000-000", id: "cep_field" %>
+    </div>
+    <div class="col-12 col-md-5">
+      <%= f.label :logradouro, class: "form-label form-label-xs" %>
+      <%= f.text_field :logradouro, class: "form-control form-control-xs", id: "logradouro_field" %>
+    </div>
+    <div class="col-6 col-md-2">
+      <%= f.label :numero, class: "form-label form-label-xs" %>
+      <%= f.text_field :numero, class: "form-control form-control-xs" %>
+    </div>
+    <div class="col-12 col-md-3">
+      <%= f.label :complemento, class: "form-label form-label-xs" %>
+      <%= f.text_field :complemento, class: "form-control form-control-xs" %>
+    </div>
+
+    <!-- Linha 5: Bairro, Cidade e UF -->
+    <div class="col-12 col-md-4">
+      <%= f.label :bairro, class: "form-label form-label-xs" %>
+      <%= f.text_field :bairro, class: "form-control form-control-xs", id: "bairro_field" %>
+    </div>
+    <div class="col-8 col-md-6">
+      <%= f.label :cidade, class: "form-label form-label-xs" %>
+      <%= f.text_field :cidade, class: "form-control form-control-xs", id: "cidade_field" %>
+    </div>
+    <div class="col-4 col-md-2">
+      <%= f.label :uf, class: "form-label form-label-xs" %>
+      <%= f.select :uf, options_for_select([
+        ['AC', 'AC'], ['AL', 'AL'], ['AP', 'AP'], ['AM', 'AM'], ['BA', 'BA'], ['CE', 'CE'],
+        ['DF', 'DF'], ['ES', 'ES'], ['GO', 'GO'], ['MA', 'MA'], ['MT', 'MT'], ['MS', 'MS'],
+        ['MG', 'MG'], ['PA', 'PA'], ['PB', 'PB'], ['PR', 'PR'], ['PE', 'PE'], ['PI', 'PI'],
+        ['RJ', 'RJ'], ['RN', 'RN'], ['RS', 'RS'], ['RO', 'RO'], ['RR', 'RR'], ['SC', 'SC'],
+        ['SP', 'SP'], ['SE', 'SE'], ['TO', 'TO']
+      ], @revenda.uf), { prompt: "UF" }, { class: "form-select form-select-xs", id: "uf_field" } %>
+    </div>
+
+    <!-- Linha 6: Gerente de Contas e Classificação -->
+    <div class="col-12 col-md-6">
+      <%= f.label :gerente_contas_id, "Gerente de Contas", class: "form-label form-label-xs" %>
+      <%= f.select :gerente_contas_id, options_from_collection_for_select(User.gerentes_contas, :id, :name, @revenda.gerente_contas_id), 
+          { prompt: "Selecione..." }, { class: "form-select form-select-xs" } %>
+    </div>
+    <div class="col-12 col-md-6">
+      <%= f.label :classificacao, class: "form-label form-label-xs" %>
+      <%= f.select :classificacao, options_for_select(Revenda::CLASSIFICACOES.map { |c| [c.humanize, c] }, @revenda.classificacao), 
+          { prompt: "Selecione..." }, { class: "form-select form-select-xs" } %>
+    </div>
+
+    <!-- Linha 7: Status -->
+    <div class="col-12 col-md-3 mt-2">
+      <%= f.label :active, "Status", class: "form-label form-label-xs" %>
+      <div class="form-check">
+        <%= f.check_box :active, class: "form-check-input", checked: @revenda.persisted? ? @revenda.active : true %>
+        <%= f.label :active, "Ativo", class: "form-check-label form-check-label-xs" %>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="col-12 mt-3">
+      <div class="d-flex flex-column flex-sm-row gap-2">
+        <%= f.submit "Salvar", class: "btn btn-success btn-sm" %>
+        <%= link_to "Cancelar", @revenda.persisted? ? @revenda : revendas_path, class: "btn btn-secondary btn-sm" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<script>
+// Validações e máscaras para formulário de revenda
+document.addEventListener('DOMContentLoaded', function() {
+  initFormValidations();
+});
+
+// Compatibilidade com Turbo
+document.addEventListener('turbo:load', function() {
+  initFormValidations();
+});
+
+function initFormValidations() {
+  // 1º Ajuste: CEP com consulta automática
+  const cepField = document.getElementById('cep_field');
+  if (cepField) {
+    // Máscara CEP
+    cepField.addEventListener('input', function() {
+      let value = this.value.replace(/\D/g, '');
+      if (value.length <= 8) {
+        value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+        this.value = value;
+      }
+    });
+
+    // Consulta CEP automaticamente
+    cepField.addEventListener('blur', function() {
+      const cep = this.value.replace(/\D/g, '');
+      if (cep.length === 8) {
+        consultarCEP(cep);
+      } else if (cep.length > 0) {
+        mostrarErro(this, 'CEP deve ter 8 dígitos');
+      }
+    });
+  }
+
+  // 2º Ajuste: Telefone com detecção automática de tipo
+  const telefoneField = document.getElementById('telefone_field');
+  if (telefoneField) {
+    telefoneField.addEventListener('input', function() {
+      aplicarMascaraTelefone(this);
+    });
+
+    telefoneField.addEventListener('blur', function() {
+      validarTelefone(this);
+    });
+  }
+
+  // 3º Ajuste: CNPJ com máscara e validação obrigatória
+  const cnpjField = document.getElementById('cnpj_field');
+  if (cnpjField) {
+    // Máscara CNPJ em tempo real
+    cnpjField.addEventListener('input', function() {
+      let value = this.value.replace(/\D/g, '');
+      if (value.length <= 14) {
+        value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+        value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+        value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+        value = value.replace(/(\d{4})(\d)/, '$1-$2');
+        this.value = value;
+      }
+    });
+
+    // Validação obrigatória ao sair do campo
+    cnpjField.addEventListener('blur', function() {
+      const cnpj = this.value.replace(/\D/g, '');
+      if (cnpj.length === 0) return;
+      
+      if (cnpj.length !== 14) {
+        mostrarErro(this, 'CNPJ deve ter 14 dígitos');
+        return false;
+      }
+      
+      if (!validarCNPJ(cnpj)) {
+        mostrarErro(this, 'CNPJ inválido');
+        return false;
+      }
+      
+      limparErro(this);
+    });
+
+    // Previne sair do campo com CNPJ inválido
+    cnpjField.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab' || e.key === 'Enter') {
+        const cnpj = this.value.replace(/\D/g, '');
+        if (cnpj.length > 0 && (cnpj.length !== 14 || !validarCNPJ(cnpj))) {
+          e.preventDefault();
+          mostrarErro(this, 'Corrija o CNPJ antes de continuar');
+        }
+      }
+    });
+  }
+
+  // 4º Ajuste: Email com validação obrigatória
+  const emailField = document.querySelector('#email_suporte, input[type="email"]');
+  if (emailField) {
+    emailField.addEventListener('blur', function() {
+      validarEmail(this);
+    });
+
+    emailField.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab' || e.key === 'Enter') {
+        if (this.value && !validarEmail(this, false)) {
+          e.preventDefault();
+          mostrarErro(this, 'Corrija o email antes de continuar');
+        }
+      }
+    });
+  }
+}
+
+// Função para consultar CEP
+function consultarCEP(cep) {
+  const logradouroField = document.getElementById('logradouro_field');
+  const bairroField = document.getElementById('bairro_field');
+  const cidadeField = document.getElementById('cidade_field');
+  const ufField = document.getElementById('uf_field');
+  
+  // Mostrar loading
+  if (logradouroField) logradouroField.placeholder = 'Buscando...';
+  
+  fetch(`https://viacep.com.br/ws/${cep}/json/`)
+    .then(response => response.json())
+    .then(data => {
+      if (!data.erro) {
+        if (logradouroField) {
+          logradouroField.value = data.logradouro || '';
+          logradouroField.placeholder = '';
+        }
+        if (bairroField) bairroField.value = data.bairro || '';
+        if (cidadeField) cidadeField.value = data.localidade || '';
+        if (ufField) ufField.value = data.uf || '';
+        
+        // Focar no próximo campo vazio
+        const numeroField = document.querySelector('input[name*="numero"]');
+        if (numeroField && !numeroField.value) numeroField.focus();
+      } else {
+        mostrarErro(document.getElementById('cep_field'), 'CEP não encontrado');
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao buscar CEP:', error);
+      mostrarErro(document.getElementById('cep_field'), 'Erro ao consultar CEP');
+    })
+    .finally(() => {
+      if (logradouroField) logradouroField.placeholder = '';
+    });
+}
+
+// Função para aplicar máscara de telefone automaticamente
+function aplicarMascaraTelefone(field) {
+  const value = field.value.replace(/\D/g, '');
+  
+  if (value.startsWith('0800')) {
+    // 0800
+    field.value = value.replace(/(\d{4})(\d{0,3})(\d{0,4})/, function(match, p1, p2, p3) {
+      if (p3) return `${p1}-${p2}-${p3}`;
+      if (p2) return `${p1}-${p2}`;
+      return p1;
+    });
+  } else if (value.length >= 11) {
+    // Celular (11 dígitos)
+    field.value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+  } else if (value.length >= 10) {
+    // Fixo (10 dígitos)
+    field.value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+  } else if (value.length > 2) {
+    // Aplicar máscara parcial
+    if (value.length <= 6) {
+      field.value = value.replace(/(\d{2})(\d{0,4})/, '($1) $2');
+    } else {
+      field.value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    }
+  } else if (value.length > 0) {
+    field.value = `(${value}`;
+  }
+}
+
+// Função para validar telefone
+function validarTelefone(field) {
+  const value = field.value.replace(/\D/g, '');
+  if (value.length === 0) return true;
+  
+  const isValid = value.startsWith('0800') ? value.length === 11 : 
+                 (value.length === 10 || value.length === 11);
+  
+  if (!isValid) {
+    mostrarErro(field, 'Telefone inválido');
+    return false;
+  }
+  
+  limparErro(field);
+  return true;
+}
+
+// Função para validar CNPJ
+function validarCNPJ(cnpj) {
+  if (cnpj.length !== 14) return false;
+  if (/^(\d)\1+$/.test(cnpj)) return false;
+  
+  let tamanho = cnpj.length - 2;
+  let numeros = cnpj.substring(0, tamanho);
+  let digitos = cnpj.substring(tamanho);
+  let soma = 0;
+  let pos = tamanho - 7;
+  
+  for (let i = tamanho; i >= 1; i--) {
+    soma += numeros.charAt(tamanho - i) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  
+  let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+  if (resultado != digitos.charAt(0)) return false;
+  
+  tamanho = tamanho + 1;
+  numeros = cnpj.substring(0, tamanho);
+  soma = 0;
+  pos = tamanho - 7;
+  
+  for (let i = tamanho; i >= 1; i--) {
+    soma += numeros.charAt(tamanho - i) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  
+  resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+  return resultado == digitos.charAt(1);
+}
+
+// Função para validar email
+function validarEmail(field, showError = true) {
+  const email = field.value.trim();
+  if (email.length === 0) return true;
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValid = emailRegex.test(email);
+  
+  if (!isValid && showError) {
+    mostrarErro(field, 'Email inválido');
+    return false;
+  }
+  
+  if (isValid) limparErro(field);
+  return isValid;
+}
+
+// Função para mostrar erro
+function mostrarErro(field, mensagem) {
+  limparErro(field);
+  field.classList.add('is-invalid');
+  
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'invalid-feedback';
+  errorDiv.textContent = mensagem;
+  errorDiv.id = field.id + '_error';
+  
+  field.parentNode.appendChild(errorDiv);
+  field.focus();
+}
+
+// Função para limpar erro
+function limparErro(field) {
+  field.classList.remove('is-invalid');
+  const existingError = document.getElementById(field.id + '_error');
+  if (existingError) {
+    existingError.remove();
+  }
+}
+</script>
+
+<style>
+.form-label-xs {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.form-control-xs, .form-select-xs {
+  font-size: 0.85rem;
+  height: 35px;
+  padding: 0.4rem 0.6rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-check-label-xs {
+  font-size: 0.8rem;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+/* Estilos para validações */
+.form-control-xs.is-invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control-xs:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.invalid-feedback {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  color: #dc3545;
+}
+
+/* Responsividade para mensagens de erro */
+@media (max-width: 576px) {
+  .invalid-feedback {
+    font-size: 0.7rem;
+  }
+  
+  .form-control-xs.is-invalid {
+    box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.25);
+  }
+}
+
+/* Loading state para CEP */
+.form-control-xs[placeholder*="Buscando"] {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMTVBNyA3IDAgMSAxIDggMUE3IDcgMCAwIDEgOCAxNVoiIHN0cm9rZT0iIzZjNzU3ZCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1kYXNoYXJyYXk9IjMgMyIvPgo8L3N2Zz4K');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+</style>

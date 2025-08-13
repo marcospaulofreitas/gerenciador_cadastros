@@ -11,8 +11,9 @@
 </div>
 
 <div class="card floating-card">
-  <div class="card-body">
-    <%= form_with model: @user, local: true, class: "row g-3" do |f| %>
+  <div class="card-body p-3">
+    <div class="container-fluid" style="width: 100%; padding: 0;">
+      <%= form_with model: @user, local: true, class: "row g-2 g-md-1" do |f| %>
       <% if @user.errors.any? %>
         <div class="col-12">
           <div class="alert alert-danger">
@@ -26,49 +27,169 @@
         </div>
       <% end %>
 
-      <div class="col-md-6">
-        <%= f.label :name, "Nome", class: "form-label" %>
-        <%= f.text_field :name, class: "form-control", required: true %>
-      </div>
+          <div class="col-12 col-md-6">
+            <%= f.label :name, "Nome", class: "form-label form-label-xs" %>
+            <%= f.text_field :name, class: "form-control form-control-xs", required: true %>
+          </div>
+          <div class="col-12 col-md-6">
+            <%= f.label :email, "Email", class: "form-label form-label-xs" %>
+            <%= f.email_field :email, class: "form-control form-control-xs", id: "email_user", required: true %>
+          </div>
 
-      <div class="col-md-6">
-        <%= f.label :email, "Email", class: "form-label" %>
-        <%= f.email_field :email, class: "form-control", required: true %>
-      </div>
+          <div class="col-12 col-md-6">
+            <%= f.label :login, "Login", class: "form-label form-label-xs" %>
+            <%= f.text_field :login, class: "form-control form-control-xs", required: true %>
+          </div>
+          <div class="col-12 col-md-6">
+            <%= f.label :user_profile_id, "Perfil", class: "form-label form-label-xs" %>
+            <%= f.select :user_profile_id, options_from_collection_for_select(@user_profiles, :id, :name, @user.user_profile_id), 
+                { prompt: "Selecione um perfil" }, { class: "form-select form-select-xs", required: true } %>
+          </div>
 
-      <div class="col-md-6">
-        <%= f.label :login, "Login", class: "form-label" %>
-        <%= f.text_field :login, class: "form-control", required: true %>
-      </div>
+          <div class="col-12 col-md-6">
+            <%= f.label :password, "Senha", class: "form-label form-label-xs" %>
+            <%= f.password_field :password, class: "form-control form-control-xs", required: true %>
+          </div>
+          <div class="col-12 col-md-6">
+            <%= f.label :password_confirmation, "Confirmar Senha", class: "form-label form-label-xs" %>
+            <%= f.password_field :password_confirmation, class: "form-control form-control-xs", required: true %>
+          </div>
 
-      <div class="col-md-6">
-        <%= f.label :user_profile_id, "Perfil", class: "form-label" %>
-        <%= f.select :user_profile_id, options_from_collection_for_select(@user_profiles, :id, :name, @user.user_profile_id), 
-            { prompt: "Selecione um perfil" }, { class: "form-select", required: true } %>
-      </div>
+          <div class="col-12">
+            <%= f.label :revenda_id, "Revenda (opcional)", class: "form-label form-label-xs" %>
+            <%= f.select :revenda_id, options_from_collection_for_select(@revendas, :id, :nome_fantasia, @user.revenda_id), 
+                { prompt: "Selecione uma revenda" }, { class: "form-select form-select-xs" } %>
+          </div>
 
-      <div class="col-md-6">
-        <%= f.label :password, "Senha", class: "form-label" %>
-        <%= f.password_field :password, class: "form-control", required: true %>
-      </div>
-
-      <div class="col-md-6">
-        <%= f.label :password_confirmation, "Confirmar Senha", class: "form-label" %>
-        <%= f.password_field :password_confirmation, class: "form-control", required: true %>
-      </div>
-
-      <div class="col-12">
-        <%= f.label :revenda_id, "Revenda (opcional - apenas para Gerentes de Contas)", class: "form-label" %>
-        <%= f.select :revenda_id, options_from_collection_for_select(@revendas, :id, :nome_fantasia, @user.revenda_id), 
-            { prompt: "Selecione uma revenda" }, { class: "form-select" } %>
-      </div>
-
-      <div class="col-12">
-        <div class="d-flex gap-2">
-          <%= f.submit "Criar Usuário", class: "btn btn-info" %>
-          <%= link_to "Cancelar", users_path, class: "btn btn-outline-secondary" %>
-        </div>
-      </div>
-    <% end %>
+          <div class="col-12 mt-3">
+            <div class="d-flex flex-column flex-sm-row gap-2">
+              <%= f.submit "Criar Usuário", class: "btn btn-info btn-sm" %>
+              <%= link_to "Cancelar", users_path, class: "btn btn-secondary btn-sm" %>
+            </div>
+          </div>
+      <% end %>
+    </div>
   </div>
 </div>
+
+<script>
+// Validações para formulário de usuário
+document.addEventListener('DOMContentLoaded', function() {
+  initUserValidations();
+});
+
+// Compatibilidade com Turbo
+document.addEventListener('turbo:load', function() {
+  initUserValidations();
+});
+
+function initUserValidations() {
+  // Email com validação obrigatória
+  const emailField = document.getElementById('email_user');
+  if (emailField) {
+    emailField.addEventListener('blur', function() {
+      validarEmail(this);
+    });
+
+    emailField.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab' || e.key === 'Enter') {
+        if (this.value && !validarEmail(this, false)) {
+          e.preventDefault();
+          mostrarErro(this, 'Corrija o email antes de continuar');
+        }
+      }
+    });
+  }
+}
+
+// Função para validar email
+function validarEmail(field, showError = true) {
+  const email = field.value.trim();
+  if (email.length === 0) return true;
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValid = emailRegex.test(email);
+  
+  if (!isValid && showError) {
+    mostrarErro(field, 'Email inválido');
+    return false;
+  }
+  
+  if (isValid) limparErro(field);
+  return isValid;
+}
+
+// Função para mostrar erro
+function mostrarErro(field, mensagem) {
+  limparErro(field);
+  field.classList.add('is-invalid');
+  
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'invalid-feedback';
+  errorDiv.textContent = mensagem;
+  errorDiv.id = field.id + '_error';
+  
+  field.parentNode.appendChild(errorDiv);
+  field.focus();
+}
+
+// Função para limpar erro
+function limparErro(field) {
+  field.classList.remove('is-invalid');
+  const existingError = document.getElementById(field.id + '_error');
+  if (existingError) {
+    existingError.remove();
+  }
+}
+</script>
+
+<style>
+.form-label-xs {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.form-control-xs, .form-select-xs {
+  font-size: 0.85rem;
+  height: 35px;
+  padding: 0.4rem 0.6rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-check-label-xs {
+  font-size: 0.8rem;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+/* Estilos para validações */
+.form-control-xs.is-invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control-xs:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.invalid-feedback {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  color: #dc3545;
+}
+
+/* Responsividade para mensagens de erro */
+@media (max-width: 576px) {
+  .invalid-feedback {
+    font-size: 0.7rem;
+  }
+  
+  .form-control-xs.is-invalid {
+    box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.25);
+  }
+}
+</style>

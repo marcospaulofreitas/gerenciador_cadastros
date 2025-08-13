@@ -10,9 +10,9 @@
 </div>
 
 <!-- Cartões Lado a Lado -->
-<div class="row g-3 mb-3">
+<div class="row g-2 g-md-3 mb-3">
   <!-- Cartão Informações da Revenda -->
-  <div class="col-md-6">
+  <div class="col-12 col-lg-6">
     <div class="card floating-card h-100">
       <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center" style="height: 45px;">
         <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informações da Revenda</h6>
@@ -49,11 +49,7 @@
             <strong style="font-size: 0.75rem;"><%= @revenda.responsavel %></strong>
           </div>
           
-          <div class="col-6">
-            <small class="text-muted" style="font-size: 0.7rem;">Tipo:</small><br>
-            <strong style="font-size: 0.75rem;"><%= @revenda.tipo_contato.humanize %></strong>
-          </div>
-          <div class="col-6">
+          <div class="col-12">
             <small class="text-muted" style="font-size: 0.7rem;">Telefone:</small><br>
             <strong style="font-size: 0.75rem;"><%= @revenda.telefone_suporte %></strong>
           </div>
@@ -85,7 +81,9 @@
           <!-- Status -->
           <div class="col-12">
             <small class="text-muted" style="font-size: 0.7rem;">Status:</small><br>
-            <span class="badge bg-success" style="font-size: 0.65rem;">Ativo</span>
+            <span class="badge bg-<%= @revenda.active? ? 'success' : 'danger' %>" style="font-size: 0.65rem;">
+              <%= @revenda.active? ? 'Ativo' : 'Inativo' %>
+            </span>
           </div>
         </div>
       </div>
@@ -93,7 +91,7 @@
   </div>
   
   <!-- Cartão Técnicos -->
-  <div class="col-md-6">
+  <div class="col-12 col-lg-6">
     <div class="card floating-card h-100">
       <div class="card-header bg-success text-white d-flex justify-content-between align-items-center" style="height: 45px;">
         <h6 class="mb-0"><i class="fas fa-users me-2"></i>Técnicos da Revenda</h6>

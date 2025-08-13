@@ -57,23 +57,23 @@
 </div>
 
 <!-- Modal de Confirmação -->
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="false">
   <div class="modal-dialog modal-dialog-centered modal-sm">
-    <div class="modal-content">
-      <div class="modal-header border-0">
+    <div class="modal-content border-2 shadow-lg">
+      <div class="modal-header border-0 pb-2">
         <h5 class="modal-title" id="confirmModalTitle">Confirmar Ação</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="modalCloseBtn"></button>
       </div>
-      <div class="modal-body text-center py-4">
+      <div class="modal-body text-center py-3">
         <div class="mb-3">
           <i id="confirmIcon" class="fas fa-question-circle fa-3x text-warning"></i>
         </div>
-        <p id="confirmMessage" class="mb-0 fs-5"></p>
+        <p id="confirmMessage" class="mb-0 fs-6"></p>
       </div>
-      <div class="modal-footer border-0 justify-content-center">
+      <div class="modal-footer border-0 justify-content-center pt-2">
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-primary btn-sm" id="confirmButton" style="width: 90px; font-size: 0.75rem; text-align: center; padding: 4px 8px;">Confirmar</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" style="width: 90px; font-size: 0.75rem; text-align: center; padding: 4px 8px;">Cancelar</button>
+          <button type="button" class="btn btn-primary btn-sm" id="confirmButton" style="width: 90px; font-size: 0.8rem; padding: 6px 12px;">Confirmar</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="cancelButton" style="width: 90px; font-size: 0.8rem; padding: 6px 12px;">Cancelar</button>
         </div>
       </div>
     </div>
@@ -143,8 +143,14 @@ document.addEventListener('click', function(e) {
     const action = btn.dataset.action;
     
     // Configurar modal
-    const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    const modalElement = document.getElementById('confirmModal');
+    const modal = new bootstrap.Modal(modalElement, {
+      backdrop: false,
+      keyboard: true
+    });
+    
     const confirmButton = document.getElementById('confirmButton');
+    const cancelButton = document.getElementById('cancelButton');
     const confirmMessage = document.getElementById('confirmMessage');
     const confirmIcon = document.getElementById('confirmIcon');
     
@@ -152,21 +158,31 @@ document.addEventListener('click', function(e) {
     if (action === 'desativar') {
       confirmMessage.textContent = 'Tem certeza que deseja desativar esta revenda?';
       confirmIcon.className = 'fas fa-exclamation-triangle fa-3x text-warning';
-      confirmButton.className = 'btn btn-primary';
-      confirmButton.textContent = 'Confirmar';
+      confirmButton.className = 'btn btn-danger btn-sm';
+      confirmButton.textContent = 'Desativar';
     } else {
       confirmMessage.textContent = 'Tem certeza que deseja ativar esta revenda?';
       confirmIcon.className = 'fas fa-check-circle fa-3x text-success';
-      confirmButton.className = 'btn btn-primary';
-      confirmButton.textContent = 'Confirmar';
+      confirmButton.className = 'btn btn-success btn-sm';
+      confirmButton.textContent = 'Ativar';
     }
     
-    // Remover listeners anteriores e adicionar novo
-    const newConfirmButton = confirmButton.cloneNode(true);
-    confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
+    // Função para fechar modal
+    function closeModal() {
+      modal.hide();
+    }
     
+    // Remover listeners anteriores
+    const newConfirmButton = confirmButton.cloneNode(true);
+    const newCancelButton = cancelButton.cloneNode(true);
+    confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
+    cancelButton.parentNode.replaceChild(newCancelButton, cancelButton);
+    
+    // Adicionar listener para confirmar
     newConfirmButton.addEventListener('click', function() {
-      // Fazer requisição
+      newConfirmButton.disabled = true;
+      newConfirmButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+      
       fetch(`/revendas/${revendaId}/toggle_status`, {
         method: 'PATCH',
         headers: {
@@ -175,7 +191,6 @@ document.addEventListener('click', function(e) {
         }
       })
       .then(response => {
-        modal.hide();
         if (response.ok) {
           return response.json();
         } else {
@@ -183,6 +198,7 @@ document.addEventListener('click', function(e) {
         }
       })
       .then(data => {
+        closeModal();
         if (data.success) {
           location.reload();
         } else {
@@ -190,10 +206,24 @@ document.addEventListener('click', function(e) {
         }
       })
       .catch(error => {
-        modal.hide();
+        closeModal();
         console.error('Erro:', error);
         alert('Erro ao alterar status da revenda');
       });
+    });
+    
+    // Adicionar listener para cancelar
+    newCancelButton.addEventListener('click', closeModal);
+    
+    // Adicionar listener para botão X
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    
+    // Adicionar listener para ESC
+    document.addEventListener('keydown', function escHandler(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+        document.removeEventListener('keydown', escHandler);
+      }
     });
     
     modal.show();
@@ -203,3 +233,60 @@ document.addEventListener('click', function(e) {
 document.addEventListener('DOMContentLoaded', initFilters);
 document.addEventListener('turbo:load', initFilters);
 </script>
+
+<style>
+/* Modal sem backdrop - melhorar visibilidade */
+#confirmModal .modal-content {
+  border: 2px solid #007bff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsividade do modal */
+@media (max-width: 576px) {
+  #confirmModal .modal-dialog {
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+  
+  #confirmModal .modal-content {
+    border-width: 1px;
+  }
+  
+  #confirmModal .modal-body p {
+    font-size: 0.9rem;
+  }
+  
+  #confirmModal .modal-footer button {
+    width: 80px !important;
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
+  }
+}
+
+/* Melhorar contraste dos botões */
+#confirmModal .btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+#confirmModal .btn-success {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+#confirmModal .btn:disabled {
+  opacity: 0.7;
+}
+</style>

@@ -1,0 +1,260 @@
+<div class="container-fluid" style="width: 100%; padding: 0;">
+  <%= form_with model: [@revenda, @tecnico], local: true, class: "row g-2 g-md-1" do |f| %>
+    <% if @tecnico.errors.any? %>
+      <div class="col-12">
+        <div class="alert alert-danger">
+          <h6>Erro ao salvar:</h6>
+          <ul class="mb-0">
+            <% @tecnico.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Linha 1: Nome e Email -->
+    <div class="col-12 col-md-6">
+      <%= f.label :name, "Nome", class: "form-label form-label-xs" %>
+      <%= f.text_field :name, class: "form-control form-control-xs", required: true %>
+    </div>
+    <div class="col-12 col-md-6">
+      <%= f.label :email, "Email", class: "form-label form-label-xs" %>
+      <%= f.email_field :email, class: "form-control form-control-xs", id: "email_tecnico", required: true %>
+    </div>
+
+    <!-- Linha 2: Telefone e Username -->
+    <div class="col-12 col-md-6">
+      <%= f.label :telefone, "Telefone", class: "form-label form-label-xs" %>
+      <%= f.text_field :telefone, class: "form-control form-control-xs", id: "telefone_tecnico", required: true %>
+    </div>
+    <div class="col-12 col-md-6">
+      <%= f.label :username, "Username", class: "form-label form-label-xs" %>
+      <%= f.text_field :username, class: "form-control form-control-xs", required: true %>
+    </div>
+
+    <!-- Linha 3: Função e Perfil de Acesso -->
+    <div class="col-12 col-md-6">
+      <%= f.label :funcao, "Função", class: "form-label form-label-xs" %>
+      <%= f.select :funcao, options_for_select(Tecnico::FUNCOES.map { |f| [f.humanize, f] }, @tecnico.funcao), 
+          { prompt: "Selecione..." }, { class: "form-select form-select-xs", required: true } %>
+    </div>
+    <div class="col-12 col-md-6">
+      <%= f.label :perfil_acesso, "Perfil de Acesso", class: "form-label form-label-xs" %>
+      <%= f.select :perfil_acesso, options_for_select(Tecnico::PERFIS_ACESSO.map { |p| [p.humanize, p] }, @tecnico.perfil_acesso), 
+          { prompt: "Selecione..." }, { class: "form-select form-select-xs", required: true } %>
+    </div>
+
+    <!-- Linha 4: Senha e Confirmar Senha -->
+    <div class="col-12 col-md-6">
+      <%= f.label :password, @tecnico.persisted? ? "Nova Senha (opcional)" : "Senha", class: "form-label form-label-xs" %>
+      <%= f.password_field :password, class: "form-control form-control-xs", required: !@tecnico.persisted? %>
+    </div>
+    <div class="col-12 col-md-6">
+      <%= f.label :password_confirmation, "Confirmar Senha", class: "form-label form-label-xs" %>
+      <%= f.password_field :password_confirmation, class: "form-control form-control-xs", required: !@tecnico.persisted? %>
+    </div>
+
+    <!-- Linha 5: Especialista e Status -->
+    <div class="col-12 col-md-6 mt-2">
+      <div class="form-check">
+        <%= f.check_box :especialista, class: "form-check-input" %>
+        <%= f.label :especialista, "Especialista", class: "form-check-label form-label-xs" %>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 mt-2">
+      <div class="form-check">
+        <%= f.check_box :active, class: "form-check-input", checked: @tecnico.persisted? ? @tecnico.active : true %>
+        <%= f.label :active, "Ativo", class: "form-check-label form-label-xs" %>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="col-12 mt-3">
+      <div class="d-flex flex-column flex-sm-row gap-2">
+        <%= f.submit "Salvar", class: "btn btn-success btn-sm" %>
+        <%= link_to "Cancelar", @tecnico.persisted? ? revenda_tecnico_path(@revenda, @tecnico) : revenda_tecnicos_path(@revenda), class: "btn btn-secondary btn-sm" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<script>
+// Validações e máscaras para formulário de técnico
+document.addEventListener('DOMContentLoaded', function() {
+  initTecnicoValidations();
+});
+
+// Compatibilidade com Turbo
+document.addEventListener('turbo:load', function() {
+  initTecnicoValidations();
+});
+
+function initTecnicoValidations() {
+  // Telefone com detecção automática de tipo
+  const telefoneField = document.getElementById('telefone_tecnico');
+  if (telefoneField) {
+    telefoneField.addEventListener('input', function() {
+      aplicarMascaraTelefone(this);
+    });
+
+    telefoneField.addEventListener('blur', function() {
+      validarTelefone(this);
+    });
+  }
+
+  // Email com validação obrigatória
+  const emailField = document.getElementById('email_tecnico');
+  if (emailField) {
+    emailField.addEventListener('blur', function() {
+      validarEmail(this);
+    });
+
+    emailField.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab' || e.key === 'Enter') {
+        if (this.value && !validarEmail(this, false)) {
+          e.preventDefault();
+          mostrarErro(this, 'Corrija o email antes de continuar');
+        }
+      }
+    });
+  }
+}
+
+// Função para aplicar máscara de telefone automaticamente
+function aplicarMascaraTelefone(field) {
+  const value = field.value.replace(/\D/g, '');
+  
+  if (value.startsWith('0800')) {
+    // 0800
+    field.value = value.replace(/(\d{4})(\d{0,3})(\d{0,4})/, function(match, p1, p2, p3) {
+      if (p3) return `${p1}-${p2}-${p3}`;
+      if (p2) return `${p1}-${p2}`;
+      return p1;
+    });
+  } else if (value.length >= 11) {
+    // Celular (11 dígitos)
+    field.value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+  } else if (value.length >= 10) {
+    // Fixo (10 dígitos)
+    field.value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+  } else if (value.length > 2) {
+    // Aplicar máscara parcial
+    if (value.length <= 6) {
+      field.value = value.replace(/(\d{2})(\d{0,4})/, '($1) $2');
+    } else {
+      field.value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    }
+  } else if (value.length > 0) {
+    field.value = `(${value}`;
+  }
+}
+
+// Função para validar telefone
+function validarTelefone(field) {
+  const value = field.value.replace(/\D/g, '');
+  if (value.length === 0) return true;
+  
+  const isValid = value.startsWith('0800') ? value.length === 11 : 
+                 (value.length === 10 || value.length === 11);
+  
+  if (!isValid) {
+    mostrarErro(field, 'Telefone inválido');
+    return false;
+  }
+  
+  limparErro(field);
+  return true;
+}
+
+// Função para validar email
+function validarEmail(field, showError = true) {
+  const email = field.value.trim();
+  if (email.length === 0) return true;
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValid = emailRegex.test(email);
+  
+  if (!isValid && showError) {
+    mostrarErro(field, 'Email inválido');
+    return false;
+  }
+  
+  if (isValid) limparErro(field);
+  return isValid;
+}
+
+// Função para mostrar erro
+function mostrarErro(field, mensagem) {
+  limparErro(field);
+  field.classList.add('is-invalid');
+  
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'invalid-feedback';
+  errorDiv.textContent = mensagem;
+  errorDiv.id = field.id + '_error';
+  
+  field.parentNode.appendChild(errorDiv);
+  field.focus();
+}
+
+// Função para limpar erro
+function limparErro(field) {
+  field.classList.remove('is-invalid');
+  const existingError = document.getElementById(field.id + '_error');
+  if (existingError) {
+    existingError.remove();
+  }
+}
+</script>
+
+<style>
+.form-label-xs {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.form-control-xs, .form-select-xs {
+  font-size: 0.85rem;
+  height: 35px;
+  padding: 0.4rem 0.6rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-check-label-xs {
+  font-size: 0.8rem;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+/* Estilos para validações */
+.form-control-xs.is-invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control-xs:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.invalid-feedback {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  color: #dc3545;
+}
+
+/* Responsividade para mensagens de erro */
+@media (max-width: 576px) {
+  .invalid-feedback {
+    font-size: 0.7rem;
+  }
+  
+  .form-control-xs.is-invalid {
+    box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.25);
+  }
+}
+</style>
