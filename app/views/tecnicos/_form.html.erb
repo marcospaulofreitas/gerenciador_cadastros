@@ -73,7 +73,7 @@
     <div class="col-12 mt-3">
       <div class="d-flex flex-column flex-sm-row gap-2">
         <%= f.submit "Salvar", class: "btn btn-success btn-sm" %>
-        <%= link_to "Cancelar", @tecnico.persisted? ? revenda_tecnico_path(@revenda, @tecnico) : (params[:from] == 'dashboard' ? webposto_dashboard_path : revenda_tecnicos_path(@revenda)), class: "btn btn-secondary btn-sm" %>
+        <%= link_to "Cancelar", @tecnico.persisted? ? revenda_tecnico_path(@revenda, @tecnico) : (params[:from] == 'dashboard' ? webposto_dashboard_path : (params[:from] == 'tecnicos_globais' ? tecnicos_globais_path : revenda_tecnicos_path(@revenda))), class: "btn btn-secondary btn-sm" %>
       </div>
     </div>
   <% end %>

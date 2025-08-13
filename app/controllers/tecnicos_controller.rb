@@ -1,6 +1,6 @@
 class TecnicosController < ApplicationController
   before_action :set_revenda
-  before_action :set_tecnico, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_tecnico, only: [ :show, :edit, :update, :destroy, :toggle_status ]
   before_action :check_admin_access, only: [ :new, :create, :edit, :update, :destroy ]
 
   def index
@@ -41,6 +41,13 @@ class TecnicosController < ApplicationController
   def destroy
     @tecnico.update(active: false)
     redirect_to revenda_tecnicos_path(@revenda), notice: "Técnico inativado com sucesso."
+  end
+
+  def toggle_status
+    @tecnico.update(active: !@tecnico.active)
+    render json: { success: true, status: @tecnico.active? ? 'ativo' : 'inativo' }
+  rescue => e
+    render json: { success: false, error: e.message }, status: 422
   end
 
   private

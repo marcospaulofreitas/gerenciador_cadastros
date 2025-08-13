@@ -26,7 +26,11 @@ Rails.application.routes.draw do
     member do
       patch :toggle_status
     end
-    resources :tecnicos, except: [ :show ]
+    resources :tecnicos do
+      member do
+        patch :toggle_status
+      end
+    end
   end
   resources :users, except: [ :show ]
   resources :user_profiles, only: [ :index ]

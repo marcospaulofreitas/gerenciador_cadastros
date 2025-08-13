@@ -3,84 +3,273 @@
     <i class="fas fa-arrow-left me-1"></i>Voltar
   <% end %>
 </div>
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h3 class="text-primary mb-0">
-    <i class="fas fa-users me-2"></i>Técnicos - <%= @revenda.nome_fantasia %>
-  </h3>
-  <div>
-    <%= link_to new_revenda_tecnico_path(@revenda), class: "btn btn-success" do %>
-      <i class="fas fa-plus me-1"></i>Novo Técnico
-    <% end %>
+<div class="row justify-content-center mb-3">
+  <div class="col-12 col-lg-10 col-xl-9">
+    <div class="d-flex justify-content-between align-items-start">
+      <h3 class="text-primary mb-0">
+        <i class="fas fa-users me-2"></i>Técnicos - <%= @revenda.nome_fantasia %>
+      </h3>
+      <%= link_to new_revenda_tecnico_path(@revenda), class: "btn btn-outline-success btn-sm" do %>
+        <i class="fas fa-plus me-1"></i>Novo Técnico
+      <% end %>
+    </div>
   </div>
 </div>
 
-<div class="card floating-card">
-  <div class="card-body">
-    <% if @tecnicos.any? %>
-      <div class="table-responsive">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Telefone</th>
-              <th>Função</th>
-              <th>Perfil</th>
-              <th>Especialista</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @tecnicos.each do |tecnico| %>
-              <tr>
-                <td><strong><%= tecnico.name %></strong></td>
-                <td><%= tecnico.email %></td>
-                <td><%= tecnico.telefone %></td>
-                <td><%= tecnico.funcao_humanized %></td>
-                <td>
-                  <span class="badge bg-<%= tecnico.administrador? ? 'primary' : 'secondary' %>">
-                    <%= tecnico.perfil_acesso.humanize %>
-                  </span>
-                </td>
-                <td>
-                  <% if tecnico.especialista? %>
-                    <i class="fas fa-star text-warning"></i>
-                  <% else %>
-                    <i class="fas fa-star text-muted"></i>
-                  <% end %>
-                </td>
-                <td>
-                  <span class="badge bg-<%= tecnico.active? ? 'success' : 'danger' %>">
-                    <%= tecnico.active? ? 'Ativo' : 'Inativo' %>
-                  </span>
-                </td>
-                <td>
-                  <div class="d-flex gap-1">
-                    <%= link_to revenda_tecnico_path(@revenda, tecnico), class: "btn btn-outline-info btn-sm" do %>
-                      <i class="fas fa-eye"></i>
-                    <% end %>
-                    <%= link_to edit_revenda_tecnico_path(@revenda, tecnico), class: "btn btn-outline-primary btn-sm" do %>
-                      <i class="fas fa-edit"></i>
-                    <% end %>
-                    <%= link_to revenda_tecnico_path(@revenda, tecnico), method: :delete, 
-                        class: "btn btn-outline-danger btn-sm", 
-                        data: { confirm: "Tem certeza que deseja inativar este técnico?" } do %>
-                      <i class="fas fa-trash"></i>
-                    <% end %>
-                  </div>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+<div class="row justify-content-center">
+  <div class="col-12 col-lg-10 col-xl-9">
+    <div class="card floating-card">
+      <div class="card-body p-3" style="max-height: 540px; overflow-y: auto;">
+        <% if @tecnicos.any? %>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead>
+                <tr style="font-size: 0.85rem; text-align: center;">
+                  <th>Nome</th>
+                  <th>Email</th>
+                  <th>Telefone</th>
+                  <th>Função</th>
+                  <th>Perfil</th>
+                  <th>Especialista</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @tecnicos.each do |tecnico| %>
+                  <tr style="font-size: 0.8rem; text-align: center;">
+                    <td><%= tecnico.name %></td>
+                    <td><%= tecnico.email %></td>
+                    <td><%= tecnico.telefone %></td>
+                    <td><%= tecnico.funcao_humanized %></td>
+                    <td>
+                      <span class="badge bg-<%= tecnico.administrador? ? 'primary' : 'secondary' %>" style="font-size: 0.7rem; min-width: 70px;">
+                        <%= tecnico.administrador? ? 'Admin' : 'Técnico' %>
+                      </span>
+                    </td>
+                    <td>
+                      <% if tecnico.especialista? %>
+                        <i class="fas fa-star text-warning"></i>
+                      <% else %>
+                        <i class="fas fa-star text-muted"></i>
+                      <% end %>
+                    </td>
+                    <td>
+                      <span class="badge bg-<%= tecnico.active? ? 'success' : 'danger' %>" style="font-size: 0.7rem; min-width: 60px;">
+                        <%= tecnico.active? ? 'Ativo' : 'Inativo' %>
+                      </span>
+                    </td>
+                    <td>
+                      <div class="d-flex gap-2 justify-content-center">
+                        <%= link_to revenda_tecnico_path(@revenda, tecnico), class: "btn btn-outline-info btn-sm", style: "width: 30px; height: 26px; font-size: 0.8rem; padding: 2px;",
+                            title: "Visualizar técnico", data: { bs_toggle: "tooltip", bs_placement: "top" } do %>
+                          <i class="fas fa-eye"></i>
+                        <% end %>
+                        <%= link_to edit_revenda_tecnico_path(@revenda, tecnico), class: "btn btn-outline-primary btn-sm", style: "width: 30px; height: 26px; font-size: 0.8rem; padding: 2px;",
+                            title: "Editar técnico", data: { bs_toggle: "tooltip", bs_placement: "top" } do %>
+                          <i class="fas fa-edit"></i>
+                        <% end %>
+                        <%= link_to "#", class: "btn btn-outline-#{tecnico.active? ? 'danger' : 'success'} btn-sm toggle-tecnico-btn", style: "width: 30px; height: 26px; font-size: 0.8rem; padding: 2px;",
+                            title: "#{tecnico.active? ? 'Desativar' : 'Ativar'} técnico", data: { bs_toggle: "tooltip", bs_placement: "top", tecnico_id: tecnico.id, action: tecnico.active? ? 'desativar' : 'ativar' } do %>
+                          <% if tecnico.active? %>
+                            <i class="fas fa-ban"></i>
+                          <% else %>
+                            <i class="fas fa-check"></i>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <div class="text-center text-muted py-3">
+            <i class="fas fa-users fa-3x mb-3"></i>
+            <h4>Nenhum técnico cadastrado</h4>
+            <p>Clique em "Novo Técnico" para adicionar o primeiro técnico desta revenda.</p>
+          </div>
+        <% end %>
       </div>
-    <% else %>
-      <div class="text-center text-muted py-5">
-        <i class="fas fa-users fa-3x mb-3"></i>
-        <h4>Nenhum técnico cadastrado</h4>
-        <p>Clique em "Novo Técnico" para adicionar o primeiro técnico desta revenda.</p>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="false">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-2 shadow-lg">
+      <div class="modal-header border-0 pb-2">
+        <h5 class="modal-title" id="confirmModalTitle">Confirmar Ação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="modalCloseBtn"></button>
+      </div>
+      <div class="modal-body text-center py-3">
+        <div class="mb-3">
+          <i id="confirmIcon" class="fas fa-question-circle fa-3x text-warning"></i>
+        </div>
+        <p id="confirmMessage" class="mb-0 fs-6"></p>
+      </div>
+      <div class="modal-footer border-0 justify-content-center pt-2">
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-primary btn-sm" id="confirmButton" style="width: 90px; font-size: 0.8rem; padding: 6px 12px;">Confirmar</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="cancelButton" style="width: 90px; font-size: 0.8rem; padding: 6px 12px;">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Handler para toggle status com modal
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.toggle-tecnico-btn')) {
+    e.preventDefault();
+    const btn = e.target.closest('.toggle-tecnico-btn');
+    const tecnicoId = btn.dataset.tecnicoId;
+    const action = btn.dataset.action;
+    
+    // Configurar modal
+    const modalElement = document.getElementById('confirmModal');
+    const modal = new bootstrap.Modal(modalElement, {
+      backdrop: false,
+      keyboard: true
+    });
+    const confirmButton = document.getElementById('confirmButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmIcon = document.getElementById('confirmIcon');
+    
+    // Personalizar modal baseado na ação
+    if (action === 'desativar') {
+      confirmMessage.textContent = 'Tem certeza que deseja desativar este técnico?';
+      confirmIcon.className = 'fas fa-exclamation-triangle fa-3x text-warning';
+      confirmButton.className = 'btn btn-danger btn-sm';
+      confirmButton.textContent = 'Desativar';
+    } else {
+      confirmMessage.textContent = 'Tem certeza que deseja ativar este técnico?';
+      confirmIcon.className = 'fas fa-check-circle fa-3x text-success';
+      confirmButton.className = 'btn btn-success btn-sm';
+      confirmButton.textContent = 'Ativar';
+    }
+    
+    // Função para fechar modal
+    function closeModal() {
+      modal.hide();
+    }
+    
+    // Remover listeners anteriores
+    const newConfirmButton = confirmButton.cloneNode(true);
+    const newCancelButton = cancelButton.cloneNode(true);
+    confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
+    cancelButton.parentNode.replaceChild(newCancelButton, cancelButton);
+    
+    // Adicionar listener para confirmar
+    newConfirmButton.addEventListener('click', function() {
+      newConfirmButton.disabled = true;
+      newConfirmButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+      
+      fetch(`/revendas/<%= @revenda.id %>/tecnicos/${tecnicoId}/toggle_status`, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Erro na requisição');
+        }
+      })
+      .then(data => {
+        closeModal();
+        if (data.success) {
+          location.reload();
+        } else {
+          alert('Erro ao alterar status do técnico');
+        }
+      })
+      .catch(error => {
+        closeModal();
+        console.error('Erro:', error);
+        alert('Erro ao alterar status do técnico');
+      });
+    });
+    
+    // Adicionar listener para cancelar
+    newCancelButton.addEventListener('click', closeModal);
+    
+    // Adicionar listener para botão X
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    
+    // Adicionar listener para ESC
+    document.addEventListener('keydown', function escHandler(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+        document.removeEventListener('keydown', escHandler);
+      }
+    });
+    
+    modal.show();
+  }
+});
+</script>
+
+<style>
+/* Modal sem backdrop - melhorar visibilidade */
+#confirmModal .modal-content {
+  border: 2px solid #007bff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsividade do modal */
+@media (max-width: 576px) {
+  #confirmModal .modal-dialog {
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+  
+  #confirmModal .modal-content {
+    border-width: 1px;
+  }
+  
+  #confirmModal .modal-body p {
+    font-size: 0.9rem;
+  }
+  
+  #confirmModal .modal-footer button {
+    width: 80px !important;
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
+  }
+}
+
+/* Melhorar contraste dos botões */
+#confirmModal .btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+#confirmModal .btn-success {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+#confirmModal .btn:disabled {
+  opacity: 0.7;
+}
+</style>
