@@ -106,7 +106,7 @@
     <div class="col-12 mt-3">
       <div class="d-flex flex-column flex-sm-row gap-2">
         <%= f.submit "Salvar", class: "btn btn-success btn-sm" %>
-        <%= link_to "Cancelar", @revenda.persisted? ? @revenda : revendas_path, class: "btn btn-secondary btn-sm" %>
+        <%= link_to "Cancelar", @revenda.persisted? ? @revenda : (params[:from] == 'dashboard' ? webposto_dashboard_path : revendas_path), class: "btn btn-secondary btn-sm" %>
       </div>
     </div>
   <% end %>
